@@ -10,9 +10,8 @@ class ZshKernel (Kernel):
 
     implementation = "ZshKernel"
     implementation_version = __version__
-    banner = \
-        "Z shell kernel for Jupyter" \
-        "Author: Dan Oak https://github.com/danylo-dubinin"
+    with open(os.path.join(conf['module_root'], 'banner.txt'), 'r') as f:
+        banner = f.read()
     language_info = {
         'name': 'zsh',
         'version': '5.3',

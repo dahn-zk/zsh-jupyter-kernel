@@ -5,6 +5,7 @@ from os.path import join, dirname, realpath
 dirname = dirname(realpath(__file__))
 
 conf = {
+    'module_root': dirname,
     'logfile': join(dirname, 'kernel.log'),
     'logging_formatter': # [logging]
         '%(asctime)s | %(name)-10s | %(levelname)-6s | %(message)s',

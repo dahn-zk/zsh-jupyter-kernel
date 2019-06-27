@@ -15,4 +15,12 @@ setup(
         'IPython',
         'ipykernel',
     ],
+    package_data = {
+        'zsh_kernel': [
+            'banner.txt',
+        ],
+    },
 )
+
+# Reference
+# https://docs.python.org/3/distutils/setupscript.html

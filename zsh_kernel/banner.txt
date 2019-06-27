@@ -1,0 +1,10 @@
+ _____      _          _ _
+|__  /  ___| |__   ___| | |
+  / /  / __| '_ \ / _ \ | |
+ / /_  \__ \ | | |  __/ | |
+/____| |___/_| |_|\___|_|_|
+
+Z shell kernel for Jupyter
+
+Author: Dan Oak https://github.com/danylo-dubinin
+Source: https://github.com/danylo-dubinin/zsh-jupyter-kernel
