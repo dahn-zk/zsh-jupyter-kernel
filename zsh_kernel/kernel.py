@@ -3,6 +3,8 @@ import os
 import io
 import pexpect
 import logging as log
+from collections import OrderedDict
+
 from .conf import conf
 from . import __version__
 
@@ -23,13 +25,11 @@ class ZshKernel (Kernel):
 
     child : pexpect.spawn # [spawn]
 
-    incremental : bool
-
-    prompts : dict = {
-        'PS1': 'PEXPECT_PS1 > ',
-        'PS2': 'PEXPECT_PS2 + ',
-        'PS3': 'PEXPECT_PS3 : ',
-    } # [zsh-prompts]
+    prompts = OrderedDict([
+        ('PS1', 'PEXPECT_PS1 > '),
+        ('PS2', 'PEXPECT_PS2 + '),
+        ('PS3', 'PEXPECT_PS3 : '),
+    ]) # [zsh-prompts]
 
     pexpect_logfile : io.IOBase = None
 
@@ -67,7 +67,6 @@ class ZshKernel (Kernel):
         self._init_log_()
         log.debug(f"Initializing using {conf}")
         self._init_spawn_()
-        self.incremental = False
         self._init_zsh_()
         log.debug("Initialized")
 
@@ -90,39 +89,31 @@ class ZshKernel (Kernel):
                 raise ValueError("No code given")
 
             code_lines : list = code.splitlines()
-
-            self.child.sendline(code_lines[0])
-            log.debug("code_lines[0]: %s", code_lines[0])
-            for i, line in enumerate(code_lines[1:], 1):
-                log.debug("code_lines[%i]: %s", i, line)
-                if not silent:
-                    if self.incremental:
-                        # TODO: fix multiline and incremental
-                        actual = self.child.expect_exact(
-                            self.prompts + os.linesep,
-                            timeout = None, # to wait indefinitely [1]
-                        )
-                        while actual == 2:
+            for line in code_lines:
+                log.debug("code: %s", line)
+                self.child.sendline(line)
+                actual = self.child.expect_exact(
+                    list(self.prompts.values()) + [os.linesep]
+                )
+                if actual == 0:
+                    log.debug(f"output: {self.child.before}")
+                    if not silent:
+                        self.send_response(self.iopub_socket, 'stream', {
+                            'name': 'stdout',
+                            'text': self.child.before,
+                        })
+                else:
+                    while actual == 3:
+                        log.debug(f"output: {self.child.before}")
+                        if not silent:
                             self.send_response(self.iopub_socket, 'stream', {
                                 'name': 'stdout',
                                 'text': self.child.before + os.linesep,
                             })
-                        if len(self.child.before) != 0:
-                            self.send_response(self.iopub_socket, 'stream', {
-                                'name': 'stdout',
-                                'text': self.child.before,
-                            })
-                self.child.sendline(line)
-
-            actual = self.child.expect_exact(self.prompts.values())
-            if actual == 0:
-                log.debug(f"output: {self.child.before}")
-                if not silent:
-                    self.send_response(self.iopub_socket, 'stream', {
-                        'name': 'stdout',
-                        'text': self.child.before,
-                    })
-            elif actual == 1:
+                        actual = self.child.expect_exact(
+                            list(self.prompts.values()) + [os.linesep]
+                        )
+            if actual in [1, 2]:
                 self.child.sendintr()
                 self.child.expect_exact(self.prompts.values())
                 raise ValueError(
