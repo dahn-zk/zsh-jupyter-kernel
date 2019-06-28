@@ -4,3 +4,6 @@
 *.egg
 
 .ipynb_checkpoints/
+
+/build/
+/dist/
