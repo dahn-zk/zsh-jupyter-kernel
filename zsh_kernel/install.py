@@ -10,6 +10,7 @@ kernel_json = {
     "argv": [sys.executable, "-m", 'zsh_kernel', "-f", "{connection_file}"],
     "display_name": "Z sell",
     "language": "zsh",
+    "interrupt_mode": "message", # [interrupt]
 }
 
 def install_my_kernel_spec(user = True, prefix = None):
@@ -52,3 +53,6 @@ def main(argv = None):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
+
+# ## Reference
+# [interrupt]: https://jupyter-client.readthedocs.io/en/latest/messaging.html#kernel-interrupt

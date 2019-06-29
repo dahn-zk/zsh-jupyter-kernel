@@ -4,6 +4,11 @@ import io
 import pexpect
 import logging as log
 from collections import OrderedDict
+import sys
+import time
+import signal
+from tornado import gen, ioloop
+import zmq
 
 from .conf import conf
 from . import __version__
@@ -12,6 +17,7 @@ class ZshKernel (Kernel):
 
     implementation = "ZshKernel"
     implementation_version = __version__
+    protocol_version = conf['kernel']['protocol_version']
     with open(os.path.join(conf['module_root'], 'banner.txt'), 'r') as f:
         banner = f.read()
     language_info = {
@@ -75,6 +81,14 @@ class ZshKernel (Kernel):
             self.pexpect_logfile.close()
         except AttributeError:
             pass
+
+    def kernel_info_request(self, stream, ident, parent):
+        content = {'status': 'ok'}
+        content.update(self.kernel_info)
+        content.update({'protocol_version': self.protocol_version})
+        msg = self.session.send(stream, 'kernel_info_reply',
+                                content, parent, ident)
+        log.debug("info request sent: %s", msg)
 
     def do_execute(
         self,
@@ -210,6 +224,72 @@ class ZshKernel (Kernel):
                 'status': 'invalid',
             }
 
+    # Copy-pasted from kernelbase.shutdown_request to implement
+    # interrupt_request - new message in messaging specification 5.3
+    @gen.coroutine
+    def interrupt_request(self, stream, ident, parent):
+        content = yield gen.maybe_future(self.do_interrupt())
+        self.session.send(stream, u'interrupt_reply', content, parent, ident=ident)
+        # same content, but different msg_id for broadcasting on IOPub
+        self._shutdown_message = self.session.msg(u'interrupt_reply',
+                                                  content, parent
+        )
+
+        self._at_shutdown()
+        # call sys.exit after a short delay
+        loop = ioloop.IOLoop.current()
+        loop.add_timeout(time.time()+0.1, loop.stop)
+
+    def do_interrupt(self):
+        self.child.kill(signal.SIGQUIT) # [pexpect-kill][os-kill][signal]
+        log.debug("interrupted by SIGQUIT")
+        return {'status': 'ok'}
+
+    # Copy-pasted from kernelbase to patch it with support of interrupt request
+    @gen.coroutine
+    def dispatch_control(self, msg):
+        """dispatch control requests"""
+        idents, msg = self.session.feed_identities(msg, copy=False)
+        try:
+            msg = self.session.deserialize(msg, content=True, copy=False)
+        except:
+            self.log.error("Invalid Control Message", exc_info=True)
+            return
+
+        self.log.debug("Control received: %s", msg)
+
+        # Set the parent message for side effects.
+        self.set_parent(idents, msg)
+        self._publish_status(u'busy')
+        if self._aborting:
+            self._send_abort_reply(self.control_stream, msg, idents)
+            self._publish_status(u'idle')
+            return
+
+        header = msg['header']
+        msg_type = header['msg_type']
+
+        handler = self.control_handlers.get(msg_type, None)
+        if handler is None:
+            self.log.error("UNKNOWN CONTROL MESSAGE TYPE: %r", msg_type)
+        # <> patched part
+        elif msg_type == 'interrupt_request':
+            try:
+                yield gen.maybe_future(self.interrupt_request(self.control_stream, idents, msg))
+            except Exception:
+                self.log.error("Exception in control handler:", exc_info=True)
+        # </>
+        else:
+            try:
+                yield gen.maybe_future(handler(self.control_stream, idents, msg))
+            except Exception:
+                self.log.error("Exception in control handler:", exc_info=True)
+
+        sys.stdout.flush()
+        sys.stderr.flush()
+        self._publish_status(u'idle')
+        # flush to ensure reply is sent
+        self.control_stream.flush(zmq.POLLOUT)
 
 # Reference
 # [spawn]: https://pexpect.readthedocs.io/en/stable/api/pexpect.html#spawn-class
@@ -218,3 +298,6 @@ class ZshKernel (Kernel):
 # [traceback]: https://docs.python.org/3/library/traceback.html#traceback.extract_tb
 # [zsh-functions]: http://zsh.sourceforge.net/Doc/Release/Functions.html
 # [zsh-bracketed-paste]: https://archive.zhimingwang.org/blog/2015-09-21-zsh-51-and-bracketed-paste.html
+# [pexpect-kill]: https://pexpect.readthedocs.io/en/stable/api/pexpect.html#pexpect.spawn.kill
+# [os-kill]: https://docs.python.org/3/library/os.html#os.kill
+# [signal]: `man signal`

@@ -27,6 +27,7 @@ conf = {
         'logfile': join(dirname, 'pexpect.log'),
     },
     'kernel': {
+        'protocol_version': '5.3',
         'code_completness': {'cmd': "zsh -nc '{}'"},
     }
 }
