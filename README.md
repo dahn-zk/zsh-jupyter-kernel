@@ -1,11 +1,11 @@
 # Z shell kernel for Jupyter
 
-![example screenshot](./example.png)
+![example screenshot](misc/example.png)
 
 ## Install
 
 ### Pipenv
-[`install.sh`](./install.sh)
+[`install.sh`](misc/install.sh)
 ```sh
 pipenv --python 3.7 install zsh-kernel jupyter-notebook
 pipenv run python -m zsh_kernel.install --sys-prefix
@@ -18,7 +18,7 @@ python -m zsh_kernel.install
 ```
 
 ## Run
-[`lab.sh`](./lab.sh)
+[`lab.sh`](misc/lab.sh)
 ```sh
 pipenv run jupyter notebook
 ```
