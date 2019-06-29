@@ -1,13 +1,15 @@
 from setuptools import setup
 import re
 
+from zsh_kernel import __version__
+
 with open('README.md') as f:
     long_description = re.sub(r'.*example screenshot.*', '', f.read()) # [1]
 long_description_content_type = "text/markdown"
 
 setup(
     name = 'zsh_kernel',
-    version = '2.3',
+    version = __version__,
     packages = ['zsh_kernel'],
     description = 'Z shell kernel for Jupyter',
     long_description = long_description,

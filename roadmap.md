@@ -11,8 +11,6 @@ A sketch plan
 - \>2.3
   - The rest of spec messages
 - 2.3
-  - Structure improvements
-    - Deduplicate versions in `setup.py` and `__init__.py`
   - Introspection
   - Completion
   - History
