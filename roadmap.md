@@ -2,6 +2,9 @@
 A sketch plan
 ## 4.0
   - Pagers
+  - Tested in fully isolated environment
+  - Logging done right
+  - stdin
 ## 3.0 - Messaging specification 5.3 implemented
 - >2.3
   - The rest of spec messages
