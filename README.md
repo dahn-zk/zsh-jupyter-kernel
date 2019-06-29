@@ -1,7 +1,5 @@
 # Z shell kernel for Jupyter
 
-![example screenshot](misc/example.png)
-
 ## Features
 
 ### ▶️ Execute
@@ -9,11 +7,18 @@ Execute any multiline Zsh code which does not wait for `stdin`.
 A pseudo terminal process runs until a kernel is stopped and is common
 for all notebook cells.
 
+![Execution screenshot](misc/example.png)
+
 ### ⏹ Interrupt
 Interrupt any code as in any terminal.
 
+### 🔎 Inspect
+Get `man` pages for commands under cursor.
+
+![Inspection screenshot](misc/inspection.png)
+
 ### 🔮
-Everything else is under active development.  
+Other features are under active development.  
 <p align=center>
 <a href=roadmap.md>Roadmap ✅</a>
 •

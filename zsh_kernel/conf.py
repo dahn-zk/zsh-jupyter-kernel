@@ -50,6 +50,7 @@ conf.update({
             "interrupt_mode": "signal",
         },
         'code_completness': {'cmd': "zsh -nc '{}'"},
+        'code_inspection': {'cmd': r"""zsh -c 'man -P "col -b" \\'{}\\''"""}
     },
 })
 

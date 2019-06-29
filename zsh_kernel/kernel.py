@@ -212,6 +212,26 @@ class ZshKernel (Kernel):
                 'status': 'invalid',
             }
 
+    def do_inspect(self, code : str, cursor_pos : int, detail_level : int = 0):
+        self.log.debug("Received code to inspect:\n%s", code)
+        self.log.debug("cursor_pos=%s, detail_level=%d",
+            cursor_pos, detail_level,
+        )
+        line = code # TODO: select line where the cursor is
+        self.log.debug("Inspecting: %s", line)
+
+        man_page = pexpect.run(
+            conf['kernel']['code_inspection']['cmd'].format(line),
+        ).decode()
+        return {
+            'status': 'ok',
+            'found': True,
+            'data': {
+                'text/plain': man_page,
+            },
+            'metadata': {},
+        }
+
 # Reference
 # [spawn]: https://pexpect.readthedocs.io/en/stable/api/pexpect.html#spawn-class
 # [zsh-prompts]: https://jlk.fjfi.cvut.cz/arch/manpages/man/zshparam.1#PARAMETERS_USED_BY_THE_SHELL
