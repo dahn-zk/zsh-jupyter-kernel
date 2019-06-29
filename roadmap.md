@@ -10,8 +10,8 @@ A sketch plan
 ## 3.0 - Messaging specification 5.3 implemented
 - \>2.3
   - The rest of spec messages
+  - Configurable logging level with setup options
 - 2.3
-  - Introspection
   - Completion
   - History
   - Completeness
