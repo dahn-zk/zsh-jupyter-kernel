@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 jupyter = "*"
 zsh-kernel = {editable = true,path = "."}
+pytest = "==4.6.3"
 
 [requires]
 python_version = "3.7"
