@@ -2,6 +2,26 @@
 
 ![example screenshot](misc/example.png)
 
+## Features
+
+### ▶️ Execute
+Execute any multiline Zsh code which does not wait for `stdin`.
+A pseudo terminal process runs until a kernel is stopped and is common
+for all notebook cells.
+
+### ⏹ Interrupt
+Interrupt any code as in any terminal.
+
+### 🔮
+Everything else is under active development.  
+<p align=center>
+<a href=roadmap.md>Roadmap ✅</a>
+•
+<a href=CONTRIBUTING.md>Contribution 👍</a>
+•
+<a href=LICENSE>License 🤝</a>
+</p>
+
 ## Install
 
 ### Pipenv
