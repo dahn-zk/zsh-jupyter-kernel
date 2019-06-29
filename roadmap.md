@@ -7,8 +7,7 @@ A sketch plan
   - The rest of spec messages
 - 2.2
   - Structure improvements
-    - Extract kernelspec and kernel_info data to a separate
-    configuration sources
+    - Extract kernel_info data to a separate configuration source
     - Deduplicate versions in `setup.py` and `__init__.py`
   - Kernel shutdown
   - Document what's been implemented and left to be implemented
