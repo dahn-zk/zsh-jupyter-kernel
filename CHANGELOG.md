@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.1] - 2019-06-29
+
+### ➕ Added
+- Kernel interruption support
+
 ## [2.0] - 2019-06-29
 
 ### Added

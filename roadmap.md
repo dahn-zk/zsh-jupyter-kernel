@@ -1,9 +1,15 @@
 # Roadmap
-A sketch plan for 3.0
-- 2.1
-  - More tests and docs
-  - User interruption handling
-- 2.x
+A sketch plan
+## 4.0
+  - Pagers
+## 3.0 - Messaging specification 5.3 implemented
+- >2.2
   - The rest of spec messages
-- 3.0
-  - All messages are implemented
+- 2.2
+  - Structure improvements
+    - Extract kernelspec and kernel_info data to a separate
+    configuration sources
+    - Deduplicate versions in `setup.py` and `__init__.py`
+  - Kernel shutdown
+  - Document what's been implemented and left to be implemented
+  - Improve contribution doc
