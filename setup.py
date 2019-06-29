@@ -7,7 +7,7 @@ long_description_content_type = "text/markdown"
 
 setup(
     name = 'zsh_kernel',
-    version = '2.2',
+    version = '2.3',
     packages = ['zsh_kernel'],
     description = 'Z shell kernel for Jupyter',
     long_description = long_description,
