@@ -26,6 +26,7 @@ setup(
     package_data = {
         'zsh_kernel': [
             'banner.txt',
+            'capture.zsh',
         ],
     },
     license = 'GPL-3.0',

@@ -17,6 +17,11 @@ Get `man` pages for commands under cursor.
 
 ![Inspection screenshot](misc/inspection.png)
 
+### 🧰 Complete
+Complete code using all completions as in terminal.
+
+![Completion screenshot](misc/completion.png)
+
 ### 🔮
 Other features are under active development.  
 <p align=center>

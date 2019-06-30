@@ -50,7 +50,10 @@ conf.update({
             "interrupt_mode": "signal",
         },
         'code_completness': {'cmd': "zsh -nc '{}'"},
-        'code_inspection': {'cmd': r"""zsh -c 'man -P "col -b" \\'{}\\''"""}
+        'code_inspection': {'cmd': r"""zsh -c 'man -P "col -b" \\'{}\\''"""},
+        'code_completion': {'cmd': conf['module_dir'] + "/capture.zsh '{}'"},
+            # https://github.com/danylo-dubinin/zsh-capture-completion
+            # Thanks to https://github.com/Valodim/zsh-capture-completion
     },
 })
 

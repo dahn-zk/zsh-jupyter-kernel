@@ -5,6 +5,7 @@ import pexpect
 import logging
 from collections import OrderedDict
 import json
+import re
 
 from .conf import conf
 
@@ -49,9 +50,15 @@ class ZshKernel (Kernel):
 
     def _init_zsh_(self):
         init_cmds = [
+            "TERM=dumb",
             "precmd() {}", # [zsh-functions]
             *map(lambda kv: "{}='{}'".format(*kv), self.prompts.items()),
+        ]
+        self.child.sendline("; ".join(init_cmds))
+        self.child.expect_exact(self.prompts['PS1'])
+        init_cmds = [
             "unset zle_bracketed_paste", # [zsh-bracketed-paste]
+            "zle_highlight=(none)", # https://linux.die.net/man/1/zshzle
         ]
         self.child.sendline("; ".join(init_cmds))
         self.child.expect_exact(self.prompts['PS1'])
@@ -62,6 +69,8 @@ class ZshKernel (Kernel):
         self.log.debug("Initializing %s", self._json_(conf))
         self._init_spawn_()
         self._init_zsh_()
+        self.child.sendline("tty")
+        self.child.expect_exact(self.prompts['PS1'])
         self.log.debug("Initialized")
 
     def __del__(self):
@@ -230,6 +239,46 @@ class ZshKernel (Kernel):
                 'text/plain': man_page,
             },
             'metadata': {},
+        }
+
+    def parse_completee(self, code : str, cursor_pos : int) -> tuple:
+            # (context, completee, cursor_start, cursor_end)
+        context = code[:cursor_pos]
+        match = re.search(r'\S+$', context)
+        if not match:
+            match = re.search(r'\w+$', context)
+        if not match:
+            completee = ''
+        else:
+            completee = match.group(0)
+        cursor_start = cursor_pos - len(completee)
+        cursor_end = cursor_pos
+        return (context, completee, cursor_start, cursor_end)
+
+    def do_complete(self, code : str, cursor_pos : int):
+        self.log.debug("Received code to complete:\n%s", code)
+        self.log.debug("cursor_pos=%s", cursor_pos)
+        (context, completee, cursor_start, cursor_end) = \
+            self.parse_completee(code, cursor_pos)
+        self.log.debug("Parsed completee: %s",
+            (context, completee, cursor_start, cursor_end))
+        completion_cmd = conf['kernel']['code_completion']['cmd'] \
+            .format(context)
+        self.child.sendline(completion_cmd)
+        self.child.expect_exact(self.prompts.values())
+        raw_completions = self.child.before
+        self.log.debug("Got completions:\n%s", raw_completions)
+        completions = list(filter(None, raw_completions.strip().splitlines()))
+        self.log.debug("Array of completions: %s", completions)
+        matches_data = list(map(lambda x: x.split(' -- '), completions))
+            # [match, description]
+        self.log.debug("Processed matches: %s", matches_data)
+        return {
+            'status': 'ok',
+            'matches': [x[0] for x in matches_data],
+            'cursor_start' : cursor_start,
+            'cursor_end' : cursor_end,
+            'metadata' : {},
         }
 
 # Reference
