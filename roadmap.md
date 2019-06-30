@@ -15,4 +15,4 @@ A sketch plan
   - The rest of spec messages
   - Configurable logging level with setup options
 - 2.3
-  - History
+  - Images
