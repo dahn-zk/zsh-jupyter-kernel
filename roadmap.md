@@ -16,4 +16,3 @@ A sketch plan
   - Configurable logging level with setup options
 - 2.3
   - History
-  - Completeness

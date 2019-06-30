@@ -22,8 +22,12 @@ Complete code using all completions as in terminal.
 
 ![Completion screenshot](misc/completion.png)
 
+### 😎 Just do it
+See more supported features in [Misc](misc/).
+
 ### 🔮
-Other features are under active development.  
+Everything else under active development. Create an [Issue][issue] to request
+a feature.
 <p align=center>
 <a href=roadmap.md>Roadmap ✅</a>
 •
@@ -52,3 +56,7 @@ python -m zsh_kernel.install
 ```sh
 pipenv run jupyter notebook
 ```
+
+
+
+[issue]: https://github.com/danylo-dubinin/zsh-jupyter-kernel/issues/new

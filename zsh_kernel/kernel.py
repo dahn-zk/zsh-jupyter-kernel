@@ -96,9 +96,6 @@ class ZshKernel (Kernel):
         allow_stdin = False,
     ):
         try:
-            if not code:
-                raise ValueError("No code given")
-
             code_lines : list = code.splitlines()
             for line in code_lines:
                 self.log.debug("code: %s", line)
@@ -202,23 +199,17 @@ class ZshKernel (Kernel):
         }
 
     def do_is_complete(self, code : str):
-        # TODO: make it actually work for incomplete ones. exitstatus always 0
-        try:
-            (_, exitstatus) = pexpect.run(
-                conf['kernel']['code_completness']['cmd'].format(code),
-                withexitstatus = True,
-            )
-        except pexpect.ExceptionPexpect:
-            return {
-                'status': 'unknown',
-            }
+        (_, exitstatus) = pexpect.run(
+            conf['kernel']['code_completness']['cmd'].format(code),
+            withexitstatus = True,
+        )
         if exitstatus == 0:
             return {
                 'status': 'complete',
             }
         elif exitstatus == 1:
             return {
-                'status': 'invalid',
+                'status': 'incomplete',
             }
 
     def do_inspect(self, code : str, cursor_pos : int, detail_level : int = 0):
