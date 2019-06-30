@@ -13,6 +13,7 @@ notebook = "==5.7.8"
 ipykernel = "==5.1.1"
 ipython = "==7.5.0"
 jupyter-client = "==5.2.4"
+pyqt5 = "==5.12.3"
 
 [requires]
 python_version = "3.7"
