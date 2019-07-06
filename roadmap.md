@@ -9,10 +9,8 @@ A sketch plan
   - Width of terminal depends on width of notebook cell
   - Testing done right
   - Outputs are stored and able to be referenced
+  - Configurable logging level with setup options
 
 ## 3.0 - Messaging specification 5.3 implemented
-- \>2.3
-  - The rest of spec messages
-  - Configurable logging level with setup options
-- 2.3
-  - Images
+  - Tests
+  
