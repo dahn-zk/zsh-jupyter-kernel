@@ -31,9 +31,9 @@ a feature.
 <p align=center>
 <a href=roadmap.md>Roadmap ✅</a>
 •
-<a href=CONTRIBUTING.md>Contribution 👍</a>
+<a href=contributing.md>Contribution 👍</a>
 •
-<a href=LICENSE>License 🤝</a>
+<a href=license.txt>License 🤝</a>
 </p>
 
 ## Install
