@@ -1,7 +1,6 @@
-import unittest
-import jupyter_kernel_test
+from jupyter_kernel_test.kernel_tests import KernelTests
 
-class Zsh_Kernel_Tests (jupyter_kernel_test.KernelTests):
+class ZshKernelTests (KernelTests):
 
     # REQUIRED
 
@@ -25,17 +24,23 @@ class Zsh_Kernel_Tests (jupyter_kernel_test.KernelTests):
     code_hello_world = "<<<'hello, world'"
 
     # code which should cause (any) text to be written to STDERR
-    # code_stderr = ">&2 print error"
+    code_stderr = ">&2 print error"
 
     # samples for the autocompletion functionality
     # for each dictionary, `text` is the input to try and complete, and
     # `matches` the list of all complete matching strings which should be found
-    # completion_samples = [
-    #     {
-    #         'text': 'prin',
-    #         'matches': {'print'},
-    #     },
-    # ]
+    completion_samples = [
+        {
+            'text': 'print',
+            'matches': [
+                'printf',
+                'printenv',
+                # not sure why the following ones are included
+                'printf',
+                'print',
+            ],
+        },
+    ]
 
     # samples for testing code-completeness (used by console only)
     # these samples should respectively be unambigiously complete statements
@@ -45,48 +50,48 @@ class Zsh_Kernel_Tests (jupyter_kernel_test.KernelTests):
         'print 1',
         "f(){<<<2}\nf\n\n\n",
     ]
-    # incomplete_code_samples = [
-    #     "print '3",
-    # ]
-    # invalid_code_samples = [
-    # ]
+    incomplete_code_samples = [
+        "print '3",
+    ]
+    invalid_code_samples = [
+    ]
 
     # code which should cause a help pager to be displayed (as of 4.1, this is
     # displayed by the notebook only as inline text, so it's probably more
     # useful for console clients)
-    # code_page_something = "print?"
+    code_page_something = "print?"
 
     # code which should generate a (user-level) error in the kernel, and send
     # a traceback to the client
-    # code_generate_error = "raise"
+    code_generate_error = "raise"
 
     # a statement or block of code which generates a result (which is shown
     # as Out[n] instead of just something printed to stdout)
     # running each `code` should cause `result` to be displayed (note that the
     # result here will always be a string representation of whatever the actual
     # result type is - be careful of string formatting)
-    # code_execute_result = [
-    #     {
-    #         'code': "<<< $((1+2+3))",
-    #         'result': "6",
-    #     },
-    #     {
-    #         'code': "<<< $zsh_shell",
-    #         'result': "true",
-    #     },
-    # ]
+    code_execute_result = [
+        {
+            'code': "<<< $((1+2+3))",
+            'result': "6",
+        },
+        {
+            'code': "<<< $zsh_shell",
+            'result': "true",
+        },
+    ]
 
     # code which generates some sort of rich output
     # for each `code` input a single rich display object with the specified
     # `mime` type should be sent to the frontend
     # note that this expects a `display_data` message rather than
     # `execute_result`; this test might be a little too inflexible in some cases
-    # code_display_data = [
-    #     {'code': "from IPython.display import HTML, display; display(HTML('<b>test</b>'))",
-    #      'mime': "text/html"},
-    #     {'code': "from IPython.display import Math, display; display(Math('\\frac{1}{2}'))",
-    #      'mime': "text/latex"}
-    # ]
+    code_display_data = [
+        {'code': "from IPython.display import HTML, display; display(HTML('<b>test</b>'))",
+         'mime': "text/html"},
+        {'code': "from IPython.display import Math, display; display(Math('\\frac{1}{2}'))",
+         'mime': "text/latex"}
+    ]
 
     # test the support for searching/recalling history (used by console only)
     # the history tests re-use the code blocks in `code_execute_result` above,
@@ -95,24 +100,20 @@ class Zsh_Kernel_Tests (jupyter_kernel_test.KernelTests):
     # one code sample in `code_execute_result`
     # `supported_history_operations` is a list of the `hist_access_type` options
     # which should be tested; possible values are "tail", "range" and "search"
-    # code_history_pattern = "1?2*"
-    # supported_history_operations = ("tail", "search")
+    code_history_pattern = "1?2*"
+    supported_history_operations = ("tail", "search")
 
     # test the support for object inspection
     # the sample should be a name about which the kernel can give some help
     # information (a built-in function is probably a good choice)
     # only the default inspection level (equivalent to ipython "obj?")
     # is currently tested
-    # code_inspect_sample = "zip"
+    code_inspect_sample = "print"
 
     # a code sample which should cause a `clear_output` message to be sent to
     # the client
-    # code_clear_output = "from IPython.display import clear_output; clear_output()"
+    code_clear_output = "from IPython.display import clear_output; clear_output()"
 
-if __name__ == '__main__':
-    unittest.main()
 
 # Reference
 # https://github.com/jupyter/jupyter_kernel_test
-# https://docs.python-guide.org/writing/tests/
-# https://docs.python.org/3/library/unittest.html#module-unittest

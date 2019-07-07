@@ -7,15 +7,15 @@ from collections import OrderedDict
 import json
 import re
 
-from .conf import conf
+from .config import config
 
 class ZshKernel (Kernel):
 
-    implementation         = conf['kernel']['info']['implementation']
-    implementation_version = conf['kernel']['info']['implementation_version']
-    protocol_version       = conf['kernel']['info']['protocol_version']
-    banner                 = conf['kernel']['info']['banner']
-    language_info          = conf['kernel']['info']['language_info']
+    implementation         = config['kernel']['info']['implementation']
+    implementation_version = config['kernel']['info']['implementation_version']
+    protocol_version       = config['kernel']['info']['protocol_version']
+    banner                 = config['kernel']['info']['banner']
+    language_info          = config['kernel']['info']['language_info']
 
     child : pexpect.spawn # [spawn]
 
@@ -31,20 +31,20 @@ class ZshKernel (Kernel):
         return json.dumps(d, indent = 4)
 
     def _init_log_(self):
-        handler = logging.handlers.WatchedFileHandler(conf['logfile'])
-        formatter = logging.Formatter(conf['logging_formatter'])
+        handler = logging.handlers.WatchedFileHandler(config['logfile'])
+        formatter = logging.Formatter(config['logging_formatter'])
         handler.setFormatter(formatter)
-        self.log.setLevel(conf['log_level'])
+        self.log.setLevel(config['log_level'])
         self.log.addHandler(handler)
 
     def _init_spawn_(self):
-        self.pexpect_logfile = open(conf['pexpect']['logfile'], 'a')
+        self.pexpect_logfile = open(config['pexpect']['logfile'], 'a')
         self.child = pexpect.spawn(
-            conf['pexpect']['cmd'], conf['pexpect']['args'],
+            config['pexpect']['cmd'], config['pexpect']['args'],
             echo = False,
-            encoding = conf['pexpect']['encoding'],
-            codec_errors = conf['pexpect']['codec_errors'],
-            timeout = conf['pexpect']['timeout'],
+            encoding = config['pexpect']['encoding'],
+            codec_errors = config['pexpect']['codec_errors'],
+            timeout = config['pexpect']['timeout'],
             logfile = self.pexpect_logfile,
         )
 
@@ -66,7 +66,7 @@ class ZshKernel (Kernel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._init_log_()
-        self.log.debug("Initializing %s", self._json_(conf))
+        self.log.debug("Initializing %s", self._json_(config))
         self._init_spawn_()
         self._init_zsh_()
         self.child.sendline("tty")
@@ -97,6 +97,7 @@ class ZshKernel (Kernel):
     ):
         try:
             code_lines : list = code.splitlines()
+            actual = None
             for line in code_lines:
                 self.log.debug("code: %s", line)
                 self.child.sendline(line)
@@ -200,7 +201,7 @@ class ZshKernel (Kernel):
 
     def do_is_complete(self, code : str):
         (_, exitstatus) = pexpect.run(
-            conf['kernel']['code_completness']['cmd'].format(code),
+            config['kernel']['code_completness']['cmd'].format(code),
             withexitstatus = True,
         )
         if exitstatus == 0:
@@ -221,7 +222,7 @@ class ZshKernel (Kernel):
         self.log.debug("Inspecting: %s", line)
 
         man_page = pexpect.run(
-            conf['kernel']['code_inspection']['cmd'].format(line),
+            config['kernel']['code_inspection']['cmd'].format(line),
         ).decode()
         return {
             'status': 'ok',
@@ -253,7 +254,7 @@ class ZshKernel (Kernel):
             self.parse_completee(code, cursor_pos)
         self.log.debug("Parsed completee: %s",
             (context, completee, cursor_start, cursor_end))
-        completion_cmd = conf['kernel']['code_completion']['cmd'] \
+        completion_cmd = config['kernel']['code_completion']['cmd'] \
             .format(context)
         self.child.sendline(completion_cmd)
         self.child.expect_exact(self.prompts.values())

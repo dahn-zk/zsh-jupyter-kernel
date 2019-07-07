@@ -1,6 +1,9 @@
 # Roadmap
 A sketch plan
 
+## 5.0
+  - Images
+
 ## 4.0
   - stdin
   - Pagers just are dumping everything to stdout
@@ -9,7 +12,6 @@ A sketch plan
   - Width of terminal depends on width of notebook cell
   - Testing done right
   - Outputs are stored and able to be referenced
-
-## 3.0 - Messaging specification 5.3 implemented
-  - Tests
+  - Rest of the messages
+  - The best of Zsh completions
   

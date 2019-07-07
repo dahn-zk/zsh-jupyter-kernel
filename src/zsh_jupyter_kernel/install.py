@@ -6,13 +6,13 @@ import sys
 from jupyter_client.kernelspec import KernelSpecManager
 from IPython.utils.tempdir import TemporaryDirectory
 
-from .conf import conf
+from .config import config
 
 def install_my_kernel_spec(user = True, prefix = None):
     with TemporaryDirectory() as td:
         os.chmod(td, 0o755) # Starts off as 700, not user readable
         with open(os.path.join(td, 'kernel.json'), 'w') as f:
-            json.dump(conf['kernel']['spec'], f, sort_keys = True)
+            json.dump(config['kernel']['spec'], f, sort_keys = True)
         # TODO: Copy any resources
 
         KernelSpecManager().install_kernel_spec(td,

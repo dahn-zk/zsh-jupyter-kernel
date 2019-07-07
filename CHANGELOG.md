@@ -1,5 +1,10 @@
 # Changelog
 
+## [3.0] - 2019-07-07
+### ➕ Added 
+- 🔁 Now package is named `zsh-jupyter-kernel` for specificity 
+  and released at https://pypi.org/project/zsh-jupyter-kernel/
+
 ## [2.1-2.3] - 2019-06-30
 
 ### ➕ Added

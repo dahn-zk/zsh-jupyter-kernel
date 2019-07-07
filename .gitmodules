@@ -1,0 +1,6 @@
+[submodule "jupyter-protocol"]
+	path = src/jupyter-protocol
+	url = git@github.com:danylo-dubinin/jupyter_protocol.git
+[submodule "jupyter-kernel-test"]
+	path = src/jupyter-kernel-test
+	url = git@github.com:danylo-dubinin/jupyter_kernel_test.git
