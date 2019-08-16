@@ -1,5 +1,7 @@
 # Z shell kernel for Jupyter
 
+[![Gitter](https://badges.gitter.im/zsh-jupyter-kernel/community.svg)](https://gitter.im/zsh-jupyter-kernel/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 ## Features
 
 ### ▶️ Execute
@@ -47,11 +49,16 @@ pipenv run python -m zsh_jupyter_kernel.install --sys-prefix
 
 ### Pip
 ```sh
-python -m pip install zsh-kernel
-python -m zsh_jupyter_kernel.install
+python3 -mpip install notebook zsh_jupyter_kernel
+python3 -mzsh_jupyter_kernel.install --sys-prefix
 ```
 
 ## Run
+
+### Dockerized
+See https://github.com/eiro/play-jupyter
+
+### Native
 [`lab.sh`](misc/lab.sh)
 ```sh
 pipenv run jupyter notebook
@@ -59,6 +66,7 @@ pipenv run jupyter notebook
 
 ## Thanks to
 - https://github.com/Valodim/zsh-capture-completion for script to get Zsh completions as data
+- https://github.com/eiro/play-jupyter for Dockerfile and doc fixes
 - Jupyter Development Team for Jupyter itself
 
 [issue]: https://github.com/danylo-dubinin/zsh-jupyter-kernel/issues/new
