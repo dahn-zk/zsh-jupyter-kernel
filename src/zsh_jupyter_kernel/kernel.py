@@ -50,17 +50,15 @@ class ZshKernel (Kernel):
 
     def _init_zsh_(self):
         init_cmds = [
-            "TERM=dumb",
-            "precmd() {}", # [zsh-functions]
+            *config['zsh']['init_cmds'],
             *map(lambda kv: "{}='{}'".format(*kv), self.prompts.items()),
         ]
         self.child.sendline("; ".join(init_cmds))
         self.child.expect_exact(self.prompts['PS1'])
-        init_cmds = [
-            "unset zle_bracketed_paste", # [zsh-bracketed-paste]
-            "zle_highlight=(none)", # https://linux.die.net/man/1/zshzle
+        config_cmds = [
+            *config['zsh']['config_cmds'],
         ]
-        self.child.sendline("; ".join(init_cmds))
+        self.child.sendline("; ".join(config_cmds))
         self.child.expect_exact(self.prompts['PS1'])
 
     def __init__(self, **kwargs):
@@ -278,5 +276,3 @@ class ZshKernel (Kernel):
 # [zsh-prompts]: https://jlk.fjfi.cvut.cz/arch/manpages/man/zshparam.1#PARAMETERS_USED_BY_THE_SHELL
 # [1]: # https://pexpect.readthedocs.io/en/stable/api/pexpect.html#pexpect.spawn.expect
 # [traceback]: https://docs.python.org/3/library/traceback.html#traceback.extract_tb
-# [zsh-functions]: http://zsh.sourceforge.net/Doc/Release/Functions.html
-# [zsh-bracketed-paste]: https://archive.zhimingwang.org/blog/2015-09-21-zsh-51-and-bracketed-paste.html

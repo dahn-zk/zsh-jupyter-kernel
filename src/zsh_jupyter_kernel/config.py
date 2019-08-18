@@ -16,7 +16,7 @@ config : Dict[str, Any] = {}
 config.update({
     'name': 'zsh-jupyter-kernel',
     'module': 'zsh_jupyter_kernel',
-    'version': '3.0',
+    'version': '3.1',
     'description': 'Z shell kernel for Jupyter',
     'author': 'Dan Oak',
     'author_email': 'danylo.dubinin@gmail.com',
@@ -101,6 +101,24 @@ config.update({
         'timeout': 5,
         'logfile': join(config['log_dir'], 'pexpect.log'),
     },
+    'zsh': {
+        'init_cmds': [
+            "TERM=dumb",
+
+            "autoload -Uz add-zsh-hook",
+            "add-zsh-hook -D precmd \*",
+            "add-zsh-hook -D preexec \*",
+                # [zsh-hooks]
+
+            "precmd() {}",
+            "preexec() {}",
+                # [zsh-functions]
+        ],
+        'config_cmds': [
+            "unset zle_bracketed_paste", # [zsh-bracketed-paste]
+            "zle_highlight=(none)", # https://linux.die.net/man/1/zshzle
+        ],
+    },
     'kernel': {
         'spec': { # [kernel-specs]
             "argv": [
@@ -155,6 +173,14 @@ if __name__ == '__main__':
 # [codecs]: https://docs.python.org/3/library/codecs.html
 # [logging]: https://docs.python-guide.org/writing/logging/
 # [zsh-options]: https://linux.die.net/man/1/zshoptions
+# [zsh-functions]: http://zsh.sourceforge.net/Doc/Release/Functions.html
+# [zsh-bracketed-paste]: https://archive.zhimingwang.org/blog/2015-09-21-zsh-51-and-bracketed-paste.html
+#
+# [zsh-hooks]: http://zsh.sourceforge.net/Doc/Release/User-Contributions.html
+#   - Section "Manipulating Hook Functions"
+#   Different plugins (e.g. oh-my-zsh with custom themes) use
+#   `precmd`/`preexec` hooks to set prompts. `add-zsh-hook -D <hook> <pattern>`
+#   allows to delete all assosiated functions from a hook.
 #
 # [interrupt]: https://jupyter-client.readthedocs.io/en/latest/messaging.html#kernel-interrupt
 # Interrupt by message does not work now but works by signal. This is
