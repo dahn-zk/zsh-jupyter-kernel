@@ -54,7 +54,7 @@ config.update({
 })
 
 config.update({
-    'readme': realpath(join(config['module_dir'], 'readme.md')),
+    'readme': realpath(join(config['module_dir'], 'README.md')),
 })
 
 
@@ -83,7 +83,7 @@ config.update({
     'non_python_files': [
         'banner.txt',
         'capture.zsh',
-        'readme.md',
+        'README.md',
     ],
     'pexpect': { # [pexpect-spawn]
         'cmd': 'zsh', 'args': [
@@ -98,7 +98,7 @@ config.update({
         ], # [zsh-options]
         'encoding': 'utf-8',
         'codec_errors': 'replace', # [codecs]
-        'timeout': 5,
+        'timeout': 5, # [pexpect-spawn-timeout]
         'logfile': join(config['log_dir'], 'pexpect.log'),
     },
     'zsh': {
@@ -154,7 +154,7 @@ config['kernel']['info'] = {
         # 'help_links': [
         #     {
         #         'text': 'Intro',
-        #         'url': f'{config["github_url"]}/blob/{config["git_revision_hash"]}/readme.md',
+        #         'url': f'{config["github_url"]}/blob/{config["git_revision_hash"]}/README.md',
         #     },
         # ], # git-config fails in a distributed package
     },
@@ -170,6 +170,7 @@ if __name__ == '__main__':
 
 # ## Reference
 # [pexpect-spawn]: https://pexpect.readthedocs.io/en/stable/api/pexpect.html#spawn-class
+# [pexpect-spawn-timeout]: https://pexpect.readthedocs.io/en/stable/api/pexpect.html?highlight=timeout#spawn-class
 # [codecs]: https://docs.python.org/3/library/codecs.html
 # [logging]: https://docs.python-guide.org/writing/logging/
 # [zsh-options]: https://linux.die.net/man/1/zshoptions
