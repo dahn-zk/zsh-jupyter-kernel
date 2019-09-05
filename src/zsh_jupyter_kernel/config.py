@@ -103,7 +103,7 @@ config.update({
     },
     'zsh': {
         'init_cmds': [
-            "TERM=dumb",
+            # "TERM=dumb",
 
             "autoload -Uz add-zsh-hook",
             "add-zsh-hook -D precmd \*",
