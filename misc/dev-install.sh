@@ -1,4 +1,4 @@
-rm -rf src/jupyter-kernel-test/pip-wheel-metadata
+rm -rf "../src/jupyter-kernel-test/pip-wheel-metadata"
 
 PIPENV_VERBOSITY=-1 pipenv --python 3.7
 PIPENV_VERBOSITY=-1 pipenv uninstall --all
