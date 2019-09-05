@@ -20,6 +20,10 @@ Installing the package as editable allows running the kernel directly from `src`
 
 ## Dev
 
+### Logs 
+
+[`../src/zsh_jupyter_kernel/log/{kernel,pexpect}.log`](../src/zsh_jupyter_kernel/log)
+
 ## Make a PR
 
 ## [Keep a Changelog](https://keepachangelog.com/en/0.3.0/)
