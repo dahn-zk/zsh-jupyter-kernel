@@ -98,7 +98,7 @@ config.update({
         ], # [zsh-options]
         'encoding': 'utf-8',
         'codec_errors': 'replace', # [codecs]
-        'timeout': 5, # [pexpect-spawn-timeout]
+        'timeout': None, # [pexpect-spawn-timeout]
         'logfile': join(config['log_dir'], 'pexpect.log'),
     },
     'zsh': {

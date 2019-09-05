@@ -103,15 +103,16 @@ class ZshKernel (Kernel):
                     list(self.prompts.values()) + [os.linesep]
                 )
                 if actual == 0:
-                    self.log.debug(f"output: {self.child.before}")
+                    self.log.debug(f"got PS1. output: {self.child.before}")
                     if not silent:
-                        self.send_response(self.iopub_socket, 'stream', {
-                            'name': 'stdout',
-                            'text': self.child.before,
-                        })
+                        if len(self.child.before) != 0:
+                            self.send_response(self.iopub_socket, 'stream', {
+                                'name': 'stdout',
+                                'text': self.child.before,
+                            })
                 else:
                     while actual == 3:
-                        self.log.debug(f"output: {self.child.before}")
+                        self.log.debug(f"got linesep. output: {self.child.before}")
                         if not silent:
                             self.send_response(self.iopub_socket, 'stream', {
                                 'name': 'stdout',
@@ -120,6 +121,7 @@ class ZshKernel (Kernel):
                         actual = self.child.expect_exact(
                             list(self.prompts.values()) + [os.linesep]
                         )
+            self.log.debug(f"executed all lines. actual: {actual}")
             if actual in [1, 2]:
                 self.child.sendintr()
                 self.child.expect_exact(self.prompts.values())
