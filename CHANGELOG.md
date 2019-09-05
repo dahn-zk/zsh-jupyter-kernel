@@ -1,9 +1,13 @@
 # Changelog
 
-## [3.1] - 2019-08-18
+## [3.1-3.2] - 2019-08-18 - 2019-09-05
 ### 🐞 Fixed
 - Fixed issue when Zsh did not initialize if host used `add-zsh-hook` to
   customize prompts.
+- Fixed issue when the kernel was timing out when a command did not 
+  responded within 5 seconds.
+- Fixed issue when the kernel was hanging on continuation prompt 
+  (incomplete input).
 
 ## [3.0] - 2019-07-07
 ### ➕ Added

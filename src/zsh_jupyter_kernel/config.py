@@ -16,7 +16,7 @@ config : Dict[str, Any] = {}
 config.update({
     'name': 'zsh-jupyter-kernel',
     'module': 'zsh_jupyter_kernel',
-    'version': '3.1',
+    'version': '3.2',
     'description': 'Z shell kernel for Jupyter',
     'author': 'Dan Oak',
     'author_email': 'danylo.dubinin@gmail.com',
