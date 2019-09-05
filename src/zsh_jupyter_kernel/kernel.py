@@ -123,10 +123,20 @@ class ZshKernel (Kernel):
                         )
             self.log.debug(f"executed all lines. actual: {actual}")
             if actual in [1, 2]:
-                self.child.sendintr()
-                self.child.expect_exact(self.prompts.values())
+                self.child.sendline()
+                # "flushing"
+                actual = self.child.expect_exact(self.prompts.values())
+                while actual != 0:
+                    actual = self.child.expect(
+                        self.child.expect_exact(self.prompts.values()) +
+                        [re.compile(".*")])
+                if not silent:
+                    self.send_response(self.iopub_socket, 'stream', {
+                        'name': 'stdout',
+                        'text': self.child.before,
+                    })
                 raise ValueError(
-                    "Continuation prompt found - command was incomplete"
+                    "Continuation or selection prompts are not handled yet"
                 )
 
         except KeyboardInterrupt as e:
