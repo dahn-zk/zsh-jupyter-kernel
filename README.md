@@ -41,7 +41,6 @@ a feature.
 ## Install
 
 ### Pipenv
-[`install.sh`](misc/install.sh)
 ```sh
 pipenv --python 3.7 install notebook zsh_jupyter_kernel
 pipenv run python -m zsh_jupyter_kernel.install --sys-prefix
@@ -49,8 +48,8 @@ pipenv run python -m zsh_jupyter_kernel.install --sys-prefix
 
 ### Pip
 ```sh
-python3 -mpip install notebook zsh_jupyter_kernel
-python3 -mzsh_jupyter_kernel.install --sys-prefix
+python3 -m pip install notebook zsh_jupyter_kernel
+python3 -m zsh_jupyter_kernel.install --sys-prefix
 ```
 
 ## Run

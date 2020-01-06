@@ -1,1 +1,1 @@
-pipenv run jupyter notebook
+pipenv run jupyter notebook --port=8889
