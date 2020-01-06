@@ -11,12 +11,16 @@ import sys
 from typing import Dict, Any
 import re
 
+version : str
+with open('version') as f:
+    version = f.read()
+
 config : Dict[str, Any] = {}
 
 config.update({
     'name': 'zsh-jupyter-kernel',
     'module': 'zsh_jupyter_kernel',
-    'version': '3.2',
+    'version': version,
     'description': 'Z shell kernel for Jupyter',
     'author': 'Dan Oak',
     'author_email': 'danylo.dubinin@gmail.com',

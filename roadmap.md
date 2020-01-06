@@ -7,7 +7,6 @@ A sketch plan
 ## 4.0
   - stdin
   - Pagers just are dumping everything to stdout
-  - Tested in fully isolated environment
   - Logging done right - separate for kernel and app, configurable
   - Width of terminal depends on width of notebook cell
   - Testing done right

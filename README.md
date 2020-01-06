@@ -56,7 +56,15 @@ python3 -mzsh_jupyter_kernel.install --sys-prefix
 ## Run
 
 ### Dockerized
-See https://github.com/eiro/play-jupyter
+[`./docker.zsh`](./docker.zsh)
+```sh
+docker build --tag zsh-jupyter-kernel:3.2 .
+docker run --rm --interactive --tty \
+  --publish=8889:8888 \
+  --volume=$PWD/test:/home/jovyan \
+  --name=zsh-jupyter-kernel \
+  zsh-jupyter-kernel:3.2
+```
 
 ### Native
 [`lab.sh`](misc/lab.sh)
@@ -66,7 +74,7 @@ pipenv run jupyter notebook
 
 ## Thanks to
 - https://github.com/Valodim/zsh-capture-completion for script to get Zsh completions as data
-- https://github.com/eiro/play-jupyter for Dockerfile and doc fixes
+- https://github.com/eiro/play-jupyter for initial Dockerfile and doc fixes
 - Jupyter Development Team for Jupyter itself
 
 [issue]: https://github.com/danylo-dubinin/zsh-jupyter-kernel/issues/new
