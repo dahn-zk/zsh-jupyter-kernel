@@ -18,6 +18,14 @@ with open('version') as f:
 config : Dict[str, Any] = {}
 
 config.update({
+    'module_dir': dirname(realpath(__file__)),
+})
+
+version : str
+with open(join(config['module_dir'], 'version')) as f:
+    version = f.read()
+
+config.update({
     'name': 'zsh-jupyter-kernel',
     'module': 'zsh_jupyter_kernel',
     'version': version,
@@ -48,7 +56,6 @@ config.update({
 
 config.update({
     'python_version': '>=3',
-    'module_dir': dirname(realpath(__file__)),
     # 'git_revision_hash': subprocess
     #     .check_output(['git', 'rev-parse', 'HEAD'])
     #     .decode()
@@ -88,6 +95,7 @@ config.update({
         'banner.txt',
         'capture.zsh',
         'README.md',
+        'version',
     ],
     'pexpect': { # [pexpect-spawn]
         'cmd': 'zsh', 'args': [
