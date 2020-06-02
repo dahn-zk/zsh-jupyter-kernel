@@ -1,7 +1,5 @@
 # Z shell kernel for Jupyter
 
-[![Gitter](https://badges.gitter.im/zsh-jupyter-kernel/community.svg)](https://gitter.im/zsh-jupyter-kernel/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
 ## Features
 
 ### ▶️ Execute
