@@ -20,7 +20,7 @@ def install_my_kernel_spec(user = True, prefix = None):
             user = user,
             prefix = prefix,
         )
-        print("Installed Z shell Jupyter kernel spec with prefix " + prefix)
+        print("Installed Z shell Jupyter kernel spec with prefix ", prefix)
 
 def _is_root():
     try:
