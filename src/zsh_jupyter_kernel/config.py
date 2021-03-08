@@ -11,10 +11,6 @@ import sys
 from typing import Dict, Any
 import re
 
-version : str
-with open('version') as f:
-    version = f.read()
-
 config : Dict[str, Any] = {}
 
 config.update({
