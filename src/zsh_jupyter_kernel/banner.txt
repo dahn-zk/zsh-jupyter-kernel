@@ -6,5 +6,4 @@
 
 Z shell kernel for Jupyter
 
-Author: Dan Oak https://github.com/danylo-dubinin
-Source: https://github.com/danylo-dubinin/zsh-jupyter-kernel
+https://github.com/dan-oak/zsh-jupyter-kernel

@@ -5,8 +5,8 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "*"
-jupyter-protocol = { editable = true, path = "./src/jupyter-protocol" }
-jupyter-kernel-test = { editable = true, path = "./src/jupyter-kernel-test" }
+jupyter-protocol = "*"
+jupyter-kernel-test = "*"
 notebook = "*"
 qtconsole = "*"
 pyqt5 = "*"
@@ -18,4 +18,4 @@ twine = "*"
 zsh-jupyter-kernel = { editable = true, path = "./dist/pypi/setuptools" }
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
