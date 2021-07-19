@@ -1,11 +1,16 @@
-# Contributing
- 
-See the scripts in [misc directory](/misc/).
+- There might be some scripts in [misc directory](/misc/) to help you setup a development environment.
 
-## [Keep a Changelog](https://keepachangelog.com/en/0.3.0/)
+- [Keep a Changelog](https://keepachangelog.com/en/0.3.0/).
 
-## Distribution
+- Update a [version value](/src/zsh_jupyter_kernel/version).
 
-Remember to update the [version value](/src/zsh_jupyter_kernel/version).
+For owners:
 
-Follow the readme in [distribution directory](/dist/).
+- Create and push tags on version changes: 
+```zsh
+version=`cat version`
+git tag -a $version -m $version
+git push --follow-tags
+```
+
+- To release a new version follow a readme in [distribution directory](/dist/).
