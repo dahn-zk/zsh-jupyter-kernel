@@ -19,10 +19,17 @@ class ZshKernel (Kernel):
 
     child : pexpect.spawn # [spawn]
 
+    # 're' versions are slower. i use it when the output may contain the exact 
+    # prompt strings like in `set` command
     prompts = OrderedDict([
         ('PS1', 'PEXPECT_PS1 > '),
         ('PS2', 'PEXPECT_PS2 + '),
         ('PS3', 'PEXPECT_PS3 : '),
+    ]) # [zsh-prompts]
+    prompts_re = OrderedDict([
+        ('PS1', '^PEXPECT_PS1 > '),
+        ('PS2', '^PEXPECT_PS2 \+ '),
+        ('PS3', '^PEXPECT_PS3 : '),
     ]) # [zsh-prompts]
 
     pexpect_logfile : io.IOBase = None
@@ -99,8 +106,8 @@ class ZshKernel (Kernel):
             for line in code_lines:
                 self.log.debug("code: %s", line)
                 self.child.sendline(line)
-                actual = self.child.expect_exact(
-                    list(self.prompts.values()) + [os.linesep]
+                actual = self.child.expect(
+                    list(self.prompts_re.values()) + [os.linesep]
                 )
                 if actual == 0:
                     self.log.debug(f"got PS1. output: {self.child.before}")
@@ -117,18 +124,18 @@ class ZshKernel (Kernel):
                             self.send_response(self.iopub_socket, 'stream', {
                                 'name': 'stdout',
                                 'text': self.child.before + os.linesep,
-                            })
-                        actual = self.child.expect_exact(
-                            list(self.prompts.values()) + [os.linesep]
+                            })  
+                        actual = self.child.expect(
+                            list(self.prompts_re.values()) + [os.linesep]
                         )
             self.log.debug(f"executed all lines. actual: {actual}")
             if actual in [1, 2]:
                 self.child.sendline()
                 # "flushing"
-                actual = self.child.expect_exact(self.prompts.values())
+                actual = self.child.expect(self.prompts_re.values())
                 while actual != 0:
                     actual = self.child.expect(
-                        self.child.expect_exact(self.prompts.values()) +
+                        self.child.expect(self.prompts_re.values()) +
                         [re.compile(".*")])
                 if not silent:
                     self.send_response(self.iopub_socket, 'stream', {
@@ -267,7 +274,7 @@ class ZshKernel (Kernel):
         completion_cmd = config['kernel']['code_completion']['cmd'] \
             .format(context)
         self.child.sendline(completion_cmd)
-        self.child.expect_exact(self.prompts.values())
+        self.child.expect(self.prompts_re.values())
         raw_completions = self.child.before
         self.log.debug("Got completions:\n%s", raw_completions)
         completions = list(filter(None, raw_completions.strip().splitlines()))
