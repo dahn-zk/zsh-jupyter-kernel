@@ -25,6 +25,10 @@ Complete code using all completions as in terminal.
 ### 😎 Just do it
 See more supported features in [Misc](misc/).
 
+### ⚠️ Limitations
+- Currently not possible to run commands which wait for input.
+- Due to multiple links in data transfering (zsh <> pexpect <> python <> zeromq <> browser) the application is significantly slower than plain zsh.
+
 ### 🔮
 Everything else under active development. Create an [Issue][issue] to request
 a feature.
