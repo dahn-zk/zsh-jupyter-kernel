@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.3] - 2021-07-19
+### 🐞 Fixed
+- Running `set` command which was previously stuck on execution.
+
 ## [3.1-3.2] - 2019-08-18 - 2019-09-05
 ### 🐞 Fixed
 - Fixed issue when Zsh did not initialize if host used `add-zsh-hook` to
