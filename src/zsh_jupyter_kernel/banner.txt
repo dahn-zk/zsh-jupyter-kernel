@@ -3,7 +3,3 @@
   / /  / __| '_ \ / _ \ | |
  / /_  \__ \ | | |  __/ | |
 /____| |___/_| |_|\___|_|_|
-
-Z shell kernel for Jupyter
-
-https://github.com/dan-oak/zsh-jupyter-kernel

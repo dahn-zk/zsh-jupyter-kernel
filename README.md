@@ -1,81 +1,53 @@
-# Z shell kernel for Jupyter
+# zsh kernel for jupyter
 
-## Features
+a simple z shell jupyter kernel powered by pexpect and enthusiasm
 
-### ▶️ Execute
-Execute any multiline Zsh code which does not wait for `stdin`.
-A pseudo terminal process runs until a kernel is stopped and is common
-for all notebook cells.
+support link: https://ko-fi.com/danoak
 
-![Execution screenshot](misc/example.png)
+![](misc/example.png)
 
-### ⏹ Interrupt
-Interrupt any code as in any terminal.
 
-### 🔎 Inspect
-Get `man` pages for commands under cursor.
+## installation
 
-![Inspection screenshot](misc/inspection.png)
-
-### 🧰 Complete
-Complete code using all completions as in terminal.
-
-![Completion screenshot](misc/completion.png)
-
-### 😎 Just do it
-See more supported features in [Misc](misc/).
-
-### ⚠️ Limitations
-- Currently not possible to run commands which wait for input.
-- Due to multiple links in data transfering (zsh <> pexpect <> python <> zeromq <> browser) the application is significantly slower than plain zsh.
-
-### 🔮
-Everything else under active development. Create an [Issue][issue] to request
-a feature.
-<p align=center>
-<a href=roadmap.md>Roadmap ✅</a>
-•
-<a href=CONTRIBUTING.md>Contribution 👍</a>
-•
-<a href=LICENSE.txt>License 🤝</a>
-</p>
-
-## Install
-
-### Pipenv
+### pipenv
 ```sh
-pipenv --python 3.7 install notebook zsh_jupyter_kernel
+pipenv --python 3 install notebook zsh_jupyter_kernel
 pipenv run python -m zsh_jupyter_kernel.install --sys-prefix
 ```
 
-### Pip
+### pip
 ```sh
 python3 -m pip install notebook zsh_jupyter_kernel
 python3 -m zsh_jupyter_kernel.install --sys-prefix
 ```
 
-## Run
 
-### Dockerized
-[`./docker.zsh`](./docker.zsh)
-```sh
-docker build --tag zsh-jupyter-kernel:3.2 .
-docker run --rm --interactive --tty \
-  --publish=8889:8888 \
-  --volume=$PWD/test:/home/jovyan \
-  --name=zsh-jupyter-kernel \
-  zsh-jupyter-kernel:3.2
-```
+## technical overview
 
-### Native
-[`lab.sh`](misc/lab.sh)
-```sh
-pipenv run jupyter notebook
-```
+### how does code execution work  
+the kernel configures zsh prompt string to its own custom value.  
+when a user requests a cell execution, the code is sent to kernel.   
+then the kernel puts the frontend on hold, sends the code to zsh process, and waits for the prompt string to release the frontend and let user request more code execution.
 
-## Thanks to
-- https://github.com/Valodim/zsh-capture-completion for script to get Zsh completions as data
-- https://github.com/eiro/play-jupyter for initial Dockerfile and doc fixes
-- Jupyter Development Team for Jupyter itself
+### code completion
+code completion is powered by quite a non-trivial script that involves multiple steps including spawning another temporary zsh process and capturing completion options into a data structure that jupyter frontend understands.
 
-[issue]: https://github.com/danylo-dubinin/zsh-jupyter-kernel/issues/new
+### code inspection
+code inspection is done by `man --pager ul` which sends the whole man page to the frontend.
+
+### code completeness
+code completeness is checked with the temporary zsh process and help of `EXEC` zsh option which allows to switch off code execution and simply check if the code is complete using the exit code of the zsh process itself.
+
+### stderr 
+stderr content is just send to the front-end as regular stdout.
+
+### stdin
+stdin is not supported because of the execution system when a process spawned by user waits for stdin, there is no way to detect it.
+
+### missing features
+- history
+- rich html output for things like images and tables
+- stdin. might be possible with or without the current system 
+- pagers. might be possible or not
+- stored and referenceable outputs
+ 
