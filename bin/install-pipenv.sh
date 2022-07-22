@@ -6,8 +6,6 @@ pipenv --rm
 
 # check pipenv
 pipenv --version; which pipenv
-#   pipenv, version 11.9.0
-#   /usr/bin/pipenv
 
 # forgot wtf is this
 rm -rf "../src/jupyter-kernel-test/pip-wheel-metadata"

@@ -17,4 +17,4 @@ twine = "*"
 zsh-jupyter-kernel = { editable = true, path = "./dist/pypi/setuptools" }
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"

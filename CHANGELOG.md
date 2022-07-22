@@ -1,34 +1,38 @@
-# Changelog
+# changelog
 
-## [3.3-3.4] - 2021-07-19
-### 🐞 Fixed
-- Running `set` command which was previously stuck on execution.
-- Fixed an error when installing without specifying a `prefix`
-- Fixed a command to retrieve man pages
+## [3.4.1] - 2022-07-22
+### removed
+- removed logging for production build. this fixes failed installation when log files and directory cannot be created because of access permissions
 
-## [3.1-3.2] - 2019-08-18 - 2019-09-05
-### 🐞 Fixed
-- Fixed issue when Zsh did not initialize if host used `add-zsh-hook` to
+## [3.4] - 2021-07-19
+### fixed
+- running `set` command which was previously stuck on execution.
+- fixed an error when installing without specifying a `prefix`
+- fixed a command to retrieve man pages
+
+## [3.2] - 2019-09-05
+### fixed
+- fixed issue when zsh did not initialize if host used `add-zsh-hook` to
   customize prompts.
-- Fixed issue when the kernel was timing out when a command did not 
+- fixed issue when the kernel was timing out when a command did not 
   responded within 5 seconds.
-- Fixed issue when the kernel was hanging on continuation prompt 
+- fixed issue when the kernel was hanging on continuation prompt 
   (incomplete input).
 
 ## [3.0] - 2019-07-07
-### ➕ Added
-- 🔁 Now package is named `zsh-jupyter-kernel` for specificity
+### changed
+- now package is named `zsh-jupyter-kernel` for specificity
   and released at https://pypi.org/project/zsh-jupyter-kernel/
 
-## [2.1-2.3] - 2019-06-30
-### ➕ Added
-- ⏹ Kernel interruption
+## [2.3] - 2019-06-30
+### added
+- ⏹ kernel interruption
 
 ## [2.0] - 2019-06-29
-### ➕ Added
-- 📝 Multiline support
-- 🚀 This baby is on PyPi now: https://pypi.org/project/zsh-kernel/
+### added
+- multiline support
+- this baby is on pypi now: https://pypi.org/project/zsh-kernel/
 
 ## [1.0] - 2019-06-25
-### Added
-- Required basic kernel functionality for singe line Z shell commands.
+### added
+- required basic kernel functionality for singe line z shell commands.
