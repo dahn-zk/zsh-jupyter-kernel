@@ -1,17 +1,17 @@
-"""Configuration"""
-__all__ = [
-    'config',
-    'print_as_json',
-]
+__all__ = ['config']
 
 import json
-from os.path import join, dirname, realpath, isfile
-from os import listdir, makedirs
-import sys
-from typing import Dict, Any
 import re
+import sys
+from os import makedirs
+from os.path import join, dirname, realpath
+from typing import Dict, Any
 
 config : Dict[str, Any] = {}
+
+config.update({
+    'logging_enabled': False,
+})
 
 config.update({
     'module_dir': dirname(realpath(__file__)),
@@ -27,9 +27,9 @@ config.update({
     'version': version,
     'description': 'Z shell kernel for Jupyter',
     'author': 'Dan Oak',
-    'author_email': 'danylo.dubinin@gmail.com',
-    'license': 'GPL-3.0',
-    'github_url': 'https://github.com/danylo-dubinin/zsh-jupyter-kernel',
+    'author_email': 'curly-brace-17@protonmail.com',
+    'license': 'WTFPL',
+    'github_url': 'https://github.com/dany-oak/zsh-jupyter-kernel',
     'keywords': [
         'jupyter',
         'ipython',
@@ -51,7 +51,7 @@ config.update({
 })
 
 config.update({
-    'python_version': '>=3',
+    'python_version': '>=3.10',
     # 'git_revision_hash': subprocess
     #     .check_output(['git', 'rev-parse', 'HEAD'])
     #     .decode()
@@ -78,13 +78,17 @@ with open(join(config['module_dir'], config['readme'])) as f:
     }
 
 config.update({
-    'logfile': join(config['log_dir'], 'kernel.log'),
-    'logging_formatter': # [logging]
-        '%(asctime)s | %(name)-10s | %(levelname)-6s | %(message)s',
-    'log_level': "DEBUG",
-    # 'log_level': "INFO",
+    # 'log_level': "DEBUG",
+    'log_level': "INFO",
 })
-makedirs(dirname(config['logfile']), exist_ok = True)
+
+if config['logging_enabled']:
+    config.update({
+        'logfile': join(config['log_dir'], 'kernel.log'),
+        'logging_formatter': # [logging]
+            '%(asctime)s | %(name)-10s | %(levelname)-6s | %(message)s',
+    })
+    makedirs(dirname(config['logfile']), exist_ok = True)
 
 config.update({
     'non_python_files': [
@@ -136,7 +140,8 @@ config.update({
             # Thanks to https://github.com/Valodim/zsh-capture-completion
     },
 })
-makedirs(dirname(config['pexpect']['logfile']), exist_ok = True)
+if config['logging_enabled']:
+    makedirs(dirname(config['pexpect']['logfile']), exist_ok = True)
 
 config['kernel']['info'] = {
     'protocol_version': '5.3',
@@ -160,9 +165,6 @@ config['kernel']['info'] = {
 with open(join(config['module_dir'], 'banner.txt'), 'r') as f:
     config['kernel']['info']['banner'] = f.read()
 
-def print_as_json():
-    print(json.dumps(config, indent = 4))
-
 if __name__ == '__main__':
-    print_as_json()
+    print(json.dumps(config, indent = 4))
 

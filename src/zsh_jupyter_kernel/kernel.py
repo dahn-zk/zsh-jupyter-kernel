@@ -39,6 +39,7 @@ class ZshKernel (Kernel):
 
     pexpect_logfile : io.IOBase = None
 
+    log_enabled : bool
 
     @staticmethod
     def _json_(d : dict):
@@ -46,15 +47,16 @@ class ZshKernel (Kernel):
 
 
     def _init_log_(self, **kwargs):
-        handler = logging.handlers.WatchedFileHandler(config['logfile'])
-        formatter = logging.Formatter(config['logging_formatter'])
-        handler.setFormatter(formatter)
-        self.log.setLevel(config['log_level'])
-        self.log.addHandler(handler)
+        self.log_enabled = config['logging_enabled']
+        if self.log_enabled:
+            handler = logging.handlers.WatchedFileHandler(config['logfile'])
+            formatter = logging.Formatter(config['logging_formatter'])
+            handler.setFormatter(formatter)
+            self.log.setLevel(config['log_level'])
+            self.log.addHandler(handler)
 
     def _init_spawn_(self, **kwargs):
         # noinspection PyTypeChecker
-        self.pexpect_logfile = open(config['pexpect']['logfile'], 'a')
         args = [
             '-o', 'INTERACTIVE',          # just to make sure
             '-o', 'NO_ZLE',               # no need for zsh line editor
@@ -65,6 +67,9 @@ class ZshKernel (Kernel):
         ] # [zsh-options]
         if not kwargs.get("rcs", False):
             args.extend(['-o', 'NO_RCS'])
+        if self.log_enabled:
+            # noinspection PyTypeChecker
+            self.pexpect_logfile = open(config['pexpect']['logfile'], 'a')
         self.p = pexpect.spawn(
             "zsh",
             args,
@@ -92,13 +97,13 @@ class ZshKernel (Kernel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._init_log_()
-        self.log.debug("initializing %s", self._json_(config))
+        if self.log_enabled: self.log.debug("initializing %s", self._json_(config))
         self._init_spawn_()
         self._init_zsh_(**kwargs)
         # self.p.sendline("tty")
         # self.p.expect_exact(self.ps['PS1'])
-        self.log.debug("initialized")
-        self.log.debug("kwargs:" + str(kwargs))
+        if self.log_enabled: self.log.debug("initialized")
+        if self.log_enabled: self.log.debug("kwargs:" + str(kwargs))
 
     def __del__(self):
         try:
@@ -112,18 +117,18 @@ class ZshKernel (Kernel):
         content.update(self.kernel_info)
         content.update({'protocol_version': self.protocol_version})
         msg = self.session.send(stream, 'kernel_info_reply', content, parent, ident)
-        self.log.debug("info request sent: %s", msg)
+        if self.log_enabled: self.log.debug("info request sent: %s", msg)
 
     def do_execute(self, code : str, silent : bool, store_history = True, user_expressions : dict = None, allow_stdin = False, cell_id = None):
         try:
             code_lines : list = code.splitlines()
             actual = None
             for line in code_lines:
-                self.log.debug("code: %s", line)
+                if self.log_enabled: self.log.debug("code: %s", line)
                 self.p.sendline(line)
                 actual = self.p.expect(list(self.ps_re.values()) + [os.linesep])
                 if actual == 0:
-                    self.log.debug(f"got PS1. output: {self.p.before}")
+                    if self.log_enabled: self.log.debug(f"got PS1. output: {self.p.before}")
                     if not silent:
                         if len(self.p.before) != 0:
                             self.send_response(self.iopub_socket, 'stream', {
@@ -132,14 +137,14 @@ class ZshKernel (Kernel):
                             })
                 else:
                     while actual == 3:
-                        self.log.debug(f"got linesep. output: {self.p.before}")
+                        if self.log_enabled: self.log.debug(f"got linesep. output: {self.p.before}")
                         if not silent:
                             self.send_response(self.iopub_socket, 'stream', {
                                 'name': 'stdout',
                                 'text': self.p.before + os.linesep,
                             })  
                         actual = self.p.expect(list(self.ps_re.values()) + [os.linesep])
-            self.log.debug(f"executed all lines. actual: {actual}")
+            if self.log_enabled: self.log.debug(f"executed all lines. actual: {actual}")
             if actual in [1, 2]:
                 self.p.sendline()
                 # "flushing"
@@ -154,7 +159,7 @@ class ZshKernel (Kernel):
                 raise ValueError("Continuation or selection prompts are not handled yet")
 
         except KeyboardInterrupt as e:
-            self.log.debug("interrupted by user")
+            if self.log_enabled: self.log.debug("interrupted by user")
             self.p.sendintr()
             self.p.expect_exact(self.ps['PS1'])
             if not silent:
@@ -171,7 +176,7 @@ class ZshKernel (Kernel):
             }
 
         except ValueError as e:
-            self.log.exception("value error")
+            if self.log_enabled: self.log.exception("value error")
             error_response = {
                 'execution_count': self.execution_count,
                 'ename': e.__class__.__name__,
@@ -186,7 +191,7 @@ class ZshKernel (Kernel):
             }
 
         except pexpect.TIMEOUT as e:
-            self.log.exception("timeout")
+            if self.log_enabled: self.log.exception("timeout")
             error_response = {
                 'execution_count': self.execution_count,
                 'ename': e.__class__.__name__,
@@ -201,7 +206,7 @@ class ZshKernel (Kernel):
             }
 
         except pexpect.EOF as e:
-            self.log.exception("end of file")
+            if self.log_enabled: self.log.exception("end of file")
             error_response = {
                 'execution_count': self.execution_count,
                 'ename': e.__class__.__name__,
@@ -215,7 +220,7 @@ class ZshKernel (Kernel):
                 **error_response,
             }
 
-        self.log.debug(f"success {self.execution_count}")
+        if self.log_enabled: self.log.debug(f"success {self.execution_count}")
         return {
             'status': 'ok',
             'execution_count': self.execution_count,
@@ -235,7 +240,7 @@ class ZshKernel (Kernel):
 
     def do_inspect(self, code : str, cursor_pos : int, detail_level : int = 0, omit_sections = ()):
         word = get_word_at_pos(code, cursor_pos)
-        self.log.debug("inspecting: %s", word)
+        if self.log_enabled: self.log.debug("inspecting: %s", word)
         cman = f"man --pager ul {word}"
         res = pexpect.run(cman).decode()
         return {
@@ -246,19 +251,19 @@ class ZshKernel (Kernel):
         }
 
     def do_complete(self, code : str, cursor_pos : int):
-        self.log.debug("received code to complete:\n%s", code)
-        self.log.debug("cursor_pos=%s", cursor_pos)
+        if self.log_enabled: self.log.debug("received code to complete:\n%s", code)
+        if self.log_enabled: self.log.debug("cursor_pos=%s", cursor_pos)
         (context, completee, cursor_start, cursor_end) = self.parse_completee(code, cursor_pos)
-        self.log.debug("parsed completee: %s", (context, completee, cursor_start, cursor_end))
+        if self.log_enabled: self.log.debug("parsed completee: %s", (context, completee, cursor_start, cursor_end))
         completion_cmd = config['kernel']['code_completion']['cmd'].format(context)
         self.p.sendline(completion_cmd)
         self.p.expect_exact(self.ps['PS1'])
         raw_completions = self.p.before.strip()
-        self.log.debug("got completions:\n%s", raw_completions)
+        if self.log_enabled: self.log.debug("got completions:\n%s", raw_completions)
         completions = list(filter(None, raw_completions.splitlines()))
-        self.log.debug("array of completions: %s", completions)
+        if self.log_enabled: self.log.debug("array of completions: %s", completions)
         matches_data = list(map(lambda x: x.split(' -- '), completions))  # [match, description]
-        self.log.debug("processed matches: %s", matches_data)
+        if self.log_enabled: self.log.debug("processed matches: %s", matches_data)
         return {
             'status': 'ok',
             'matches': [x[0] for x in matches_data],
