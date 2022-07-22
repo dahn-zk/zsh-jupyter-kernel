@@ -1,8 +1,7 @@
 from setuptools import setup
 from os.path import realpath
 
-# noinspection PyUnresolvedReferences
-from zsh_jupyter_kernel.config import config # [pycharm-unresolved]
+from zsh_jupyter_kernel.config import config
 
 setup(
     name = config['name'],
@@ -20,18 +19,13 @@ setup(
     },
     license = config['license'],
     classifiers = [
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Framework :: IPython',
         'Intended Audience :: Developers',
-        'Intended Audience :: Education',
-        'Intended Audience :: Information Technology',
-        'Intended Audience :: System Administrators',
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
-        'Operating System :: Unix',
-        'Operating System :: MacOS',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Other Scripting Engines',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Unix Shell',
         'Topic :: System :: Shells',
     ],
     keywords = config['keywords'],
@@ -41,4 +35,3 @@ setup(
 # Reference
 # https://packaging.python.org/tutorials/packaging-projects/
 # [1]: Image references are not handled by PyPi as for example on GitHub are.
-# [pycharm-unresolved]: In PyCharm shows 'Unresolved' warning for some reason. No idea why.

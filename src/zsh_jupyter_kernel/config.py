@@ -26,9 +26,9 @@ config.update({
     'module': 'zsh_jupyter_kernel',
     'version': version,
     'description': 'Z shell kernel for Jupyter',
-    'author': 'Dan Oak',
+    'author': 'dan oak',
     'author_email': 'curly-brace-17@protonmail.com',
-    'license': 'WTFPL',
+    'license': '',
     'github_url': 'https://github.com/dany-oak/zsh-jupyter-kernel',
     'keywords': [
         'jupyter',
