@@ -29,7 +29,7 @@ config.update({
     'author': 'dan oak',
     'author_email': 'curly-brace-17@protonmail.com',
     'license': '',
-    'github_url': 'https://github.com/dany-oak/zsh-jupyter-kernel',
+    'github_url': 'https://github.com/dan-oak/zsh-jupyter-kernel',
     'keywords': [
         'jupyter',
         'ipython',
