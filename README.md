@@ -4,7 +4,7 @@
 
 a simple z shell jupyter kernel powered by python 3, pexpect and enthusiasm.
 
-i love experimentation and tinkering, but usual shell terminals does not allow developing multiple different code snippets at once conveniently.
+i love experimentation and tinkering, but usual shell terminals do not allow developing multiple different code snippets at once conveniently.
 with shell kernels you can turn your scripts into notebooks!
 
 if you find this product useful, please consider supporting me with a one-time tip.
