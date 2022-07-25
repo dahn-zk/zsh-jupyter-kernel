@@ -72,8 +72,11 @@ with open(join(config['module_dir'], config['readme'])) as f:
         'content': readme_md,
         'type': 'text/markdown',
     }
-    config['long_description']['md_without_images'] = {
-        'content': re.sub(r'\n.*!\[.*screenshot.*\].*\n', '', readme_md),
+    config['long_description']['md_with_github_image_links'] = {
+        'content': re.sub(
+            r'(!\[.*screenshot.*])\((.*)\)',
+            r'\1(https://raw.githubusercontent.com/dan-oak/zsh-jupyter-kernel/master/\2)',
+            readme_md),
         'type': 'text/markdown',
     }
 
@@ -122,17 +125,6 @@ config.update({
         ],
     },
     'kernel': {
-        'spec': { # [kernel-specs]
-            "argv": [
-                sys.executable,
-                    "-m", 'zsh_jupyter_kernel',
-                        "-f", "{connection_file}",
-            ],
-            "display_name": "Z shell",
-            "language": "zsh",
-            # "interrupt_mode": "message", # [interrupt]
-            "interrupt_mode": "signal",
-        },
         'code_completness': {'cmd': "zsh -nc '{}'"},
         'code_inspection': {'cmd': r"""zsh -c 'man -P "col -b" \'{}\\''"""},
         'code_completion': {'cmd': config['module_dir'] + "/capture.zsh '{}'"},

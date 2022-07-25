@@ -1,5 +1,9 @@
 # changelog
 
+## [3.5.0] - 2022-07-25
+### added
+- installation options to change display name and improved options help
+
 ## [3.4.1] - 2022-07-22
 ### removed
 - removed logging for production build. this fixes failed installation when log files and directory cannot be created because of access permissions

@@ -8,8 +8,8 @@ setup(
     version = config['version'],
     packages = [config['module']],
     description = config['description'],
-    long_description = config['long_description']['md_without_images']['content'], # [1]
-    long_description_content_type = config['long_description']['md_without_images']['type'],
+    long_description = config['long_description']['md_with_github_image_links']['content'], # [1]
+    long_description_content_type = config['long_description']['md_with_github_image_links']['type'],
     author = config['author'],
     author_email = config['author_email'],
     url = config['github_url'],

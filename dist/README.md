@@ -15,7 +15,7 @@ python setup.py sdist bdist_wheel
 then to test it, upload it to testpypi:
 
 ```zsh
-twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+twine upload --repository testpypi dist/*
 ```
 
 and run in a separate window and a separate directory to test the
