@@ -1,7 +1,9 @@
 import argparse
 import json
 import os
+import shutil
 import sys
+import traceback
 
 from IPython.utils.tempdir import TemporaryDirectory
 from jupyter_client.kernelspec import install_kernel_spec, get_kernel_spec, KernelSpec
@@ -28,6 +30,8 @@ def main(argv = None):
                     fp = f,
                     indent = 4,
                 )
+            for logof in ['logo-32x32.png', 'logo-64x64.png']:
+                shutil.copy(os.path.join(os.path.dirname(__file__), logof), tempd)
             try:
                 install_kernel_spec(
                     source_dir = tempd,
@@ -36,10 +40,10 @@ def main(argv = None):
                     prefix = args.prefix,
                 )
             except OSError as e:
-                print(e)
-                print('you do not have appropriate permissions to install kernel in the specified location.\n'
-                      'try installing in a location of your user using --user option'
-                      ' or specify a custom value with --prefix.')
+                traceback.print_exception(e)
+                print('\nsorry, you do not have appropriate permissions to install kernel in the specified location.\n'
+                      'try installing in a location of your user using --user option or specify a custom value with '
+                      ' --prefix.')
             else:
                 spec: KernelSpec = get_kernel_spec(kernel_name = args.name)
                 print(
@@ -54,8 +58,8 @@ def main(argv = None):
                     ), indent = 4)}"""
                 )
     except Exception as e:
-        print(e)
-        print('sorry, an unhandled error occured.'
+        traceback.print_exception(e)
+        print('\nsorry, an unhandled error occured.'
               f' please report this bug to https://github.com/dan-oak/zsh-jupyter-kernel/issues')
 
 def is_root() -> bool:

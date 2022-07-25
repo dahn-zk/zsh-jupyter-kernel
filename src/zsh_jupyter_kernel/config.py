@@ -98,6 +98,8 @@ config.update({
         'banner.txt',
         'capture.zsh',
         'README.md',
+        'logo-32x32.png',
+        'logo-64x64.png',
         'version',
     ],
     'pexpect': { # [pexpect-spawn]
