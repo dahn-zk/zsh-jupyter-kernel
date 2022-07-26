@@ -1,5 +1,4 @@
 from setuptools import setup
-from os.path import realpath
 
 from zsh_jupyter_kernel.config import config
 
