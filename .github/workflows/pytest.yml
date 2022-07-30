@@ -17,5 +17,7 @@ jobs:
       - name: install pipenv
         run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
       - run: pipenv install --dev
+      - name: install zsh jupyter kernel
+        run: pipenv run python -m zsh_jupyter_kernel.install --sys-prefix
       - name: test with pytest
         run: pipenv run python -m pytest
