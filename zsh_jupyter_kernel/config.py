@@ -1,27 +1,25 @@
+# a list defining what symbols will be exported when `from <module> import *` is used
 __all__ = ['config']
+
+# note: this is not the cleanest way to manage a config, but i am lazy to reorganize it at this point
 
 import json
 import re
-import sys
 from os import makedirs
 from os.path import join, dirname, realpath
 from typing import Dict, Any
 
+from .fun import get_canonical_dirname
+
 config : Dict[str, Any] = {}
-
-config.update({
-    'logging_enabled': False,
-})
-
-config.update({
-    'module_dir': dirname(realpath(__file__)),
-})
-
+module_dirname = get_canonical_dirname(__file__)
 version : str
-with open(join(config['module_dir'], 'version')) as f:
+with open(join(module_dirname, 'version')) as f:
     version = f.read()
 
 config.update({
+    'logging_enabled': False,
+    'module_dir': module_dirname,
     'name': 'zsh-jupyter-kernel',
     'module': 'zsh_jupyter_kernel',
     'version': version,
@@ -43,35 +41,22 @@ config.update({
             # kernelbase.Kernel - Convenient parent class with low level instrumentation
         'jupyter_client',
             # KernelSpecManager().install_kernel_spec
-        'IPython',
-            # only for tempdir
         'pexpect',
             # Spawning and interacting with Zsh pseudo terminal
     ],
-})
-
-config.update({
     'python_version': '>=3.10',
-    # 'git_revision_hash': subprocess
-    #     .check_output(['git', 'rev-parse', 'HEAD'])
-    #     .decode()
-    #     .strip(), # git-config fails in a distributed package
-    'tests_suffix': "_test.py",
-    'log_dir': realpath(join(dirname(realpath(__file__)), 'log')),
+    'log_dir': realpath(join(module_dirname, 'log')),
+    'readme': realpath(join(module_dirname, 'README.md')),
 })
-
-config.update({
-    'readme': realpath(join(config['module_dir'], 'README.md')),
-})
-
 
 config['long_description'] = {}
-with open(join(config['module_dir'], config['readme'])) as f:
+with open(join(module_dirname, config['readme'])) as f:
     readme_md = f.read()
     config['long_description']['md'] = {
         'content': readme_md,
         'type': 'text/markdown',
     }
+    # replace github image links in the readme file to full url paths
     config['long_description']['md_with_github_image_links'] = {
         'content': re.sub(
             r'(!\[.*screenshot.*])\((.*)\)',
@@ -84,7 +69,6 @@ config.update({
     # 'log_level': "DEBUG",
     'log_level': "INFO",
 })
-
 if config['logging_enabled']:
     config.update({
         'logfile': join(config['log_dir'], 'kernel.log'),
@@ -98,6 +82,7 @@ config.update({
         'banner.txt',
         'capture.zsh',
         'README.md',
+        'LICENSE.txt',
         'logo-32x32.png',
         'logo-64x64.png',
         'version',
@@ -127,11 +112,7 @@ config.update({
         ],
     },
     'kernel': {
-        'code_completness': {'cmd': "zsh -nc '{}'"},
-        'code_inspection': {'cmd': r"""zsh -c 'man -P "col -b" \'{}\\''"""},
-        'code_completion': {'cmd': config['module_dir'] + "/capture.zsh '{}'"},
-            # https://github.com/danylo-dubinin/zsh-capture-completion
-            # Thanks to https://github.com/Valodim/zsh-capture-completion
+        'code_completion': {'cmd': module_dirname + "/capture.zsh '{}'"},
     },
 })
 if config['logging_enabled']:
@@ -148,15 +129,9 @@ config['kernel']['info'] = {
         'file_extension': '.zsh',
         'pygments_lexer': 'shell',
         'codemirror_mode': 'shell',
-        # 'help_links': [
-        #     {
-        #         'text': 'Intro',
-        #         'url': f'{config["github_url"]}/blob/{config["git_revision_hash"]}/README.md',
-        #     },
-        # ], # git-config fails in a distributed package
     },
 }
-with open(join(config['module_dir'], 'banner.txt'), 'r') as f:
+with open(join(module_dirname, 'banner.txt'), 'r') as f:
     config['kernel']['info']['banner'] = f.read()
 
 if __name__ == '__main__':

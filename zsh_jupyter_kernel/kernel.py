@@ -9,12 +9,9 @@ import pexpect
 from ipykernel.kernelbase import Kernel
 
 from .config import config
-
+from .fun import *
 
 # noinspection PyAbstractClass
-from .fun import get_word_at_pos
-
-
 class ZshKernel (Kernel):
 
     implementation         = config['kernel']['info']['implementation']
@@ -230,7 +227,7 @@ class ZshKernel (Kernel):
 
     def do_is_complete(self, code : str):
         (_, exitstatus) = pexpect.run(
-            config['kernel']['code_completness']['cmd'].format(code),
+            "zsh -nc '{}'".format(code),
             withexitstatus = True,
         )
         if exitstatus == 0:
@@ -239,7 +236,7 @@ class ZshKernel (Kernel):
             return {'status': 'incomplete' }
 
     def do_inspect(self, code : str, cursor_pos : int, detail_level : int = 0, omit_sections = ()):
-        word = get_word_at_pos(code, cursor_pos)
+        word = find_word_at_pos(code, cursor_pos)
         if self.log_enabled: self.log.debug("inspecting: %s", word)
         cman = f"man --pager ul {word}"
         res = pexpect.run(cman).decode()

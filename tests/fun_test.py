@@ -1,9 +1,8 @@
-import unittest
+from unittest import TestCase, main
 
-from src.zsh_jupyter_kernel.fun import get_word_at_pos
+from zsh_jupyter_kernel.fun import find_word_at_pos
 
-
-class fun_test(unittest.TestCase):
+class fun_test(TestCase):
 
     def test_get_word_at_pos(self):
         text = "non! autem~42? [ut]"
@@ -16,8 +15,8 @@ class fun_test(unittest.TestCase):
             "ut", "ut",
         ]
         for i, a in enumerate(t):
-            self.assertEqual(a, get_word_at_pos(text, pos = i), f"pos = {i}")
+            self.assertEqual(a, find_word_at_pos(text, pos = i), f"pos = {i}")
 
 
 if __name__ == '__main__':
-    unittest.main()
+    main()

@@ -4,8 +4,8 @@ import os
 import shutil
 import sys
 import traceback
+from tempfile import TemporaryDirectory
 
-from IPython.utils.tempdir import TemporaryDirectory
 from jupyter_client.kernelspec import install_kernel_spec, get_kernel_spec, KernelSpec
 
 def main(argv = None):

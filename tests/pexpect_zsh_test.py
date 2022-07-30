@@ -1,8 +1,9 @@
 import io
-import unittest
+from unittest import TestCase, main
+
 import pexpect
 
-class Pexpect_ZSH_Test(unittest.TestCase):
+class Pexpect_ZSH_Test(TestCase):
 
     def test_echo(self):
         p = pexpect.spawn('zsh +o INTERACTIVE')
@@ -12,4 +13,4 @@ class Pexpect_ZSH_Test(unittest.TestCase):
         self.assertEqual(p.logfile.getvalue(), b"echo 1\necho 1\r\n1\r\n")
 
 if __name__ == '__main__':
-    unittest.main()
+    main()

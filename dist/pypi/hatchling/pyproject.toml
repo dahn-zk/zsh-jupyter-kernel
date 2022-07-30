@@ -32,8 +32,6 @@ dependencies = [
         # kernelbase.Kernel - convenient parent class with low level instrumentation
     'jupyter_client',
         # KernelSpecManager().install_kernel_spec
-    'IPython',
-        # only for tempdir
     'pexpect',
         # spawning and interacting with zsh pseudo terminal
 ]

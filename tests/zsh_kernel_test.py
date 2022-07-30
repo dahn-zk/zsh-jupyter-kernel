@@ -162,6 +162,7 @@ class zsh_kernel_tests(TestCase):
             for sample in [
                 "1()",
                 "echo $((2 + 2)",
+                # "something with open single quote '", # this fails. need to handle special chars
             ]:
                 self.check_is_complete(sample, "incomplete")
 

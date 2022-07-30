@@ -9,6 +9,8 @@ with shell kernels you can turn your scripts into notebooks!
 
 if you find this product useful, please consider supporting me with a one-time tip.
 
+feedback and suggestions are welcome in [github issues](https://github.com/dan-oak/zsh-jupyter-kernel/issues).
+
 ## installation
 
 1. install the python package from [pypi](https://pypi.org/project/zsh-jupyter-kernel/).
@@ -70,3 +72,8 @@ stdin is not supported because of the execution system when a process spawned by
 - stdin. might be possible with or without the current system
 - pagers. might be possible or not
 - stored and referenceable outputs
+
+## troubleshooting
+
+please let me know if you encounter an error or unexpected behavior using [github issues](https://github.com/dan-oak/zsh-jupyter-kernel/issues).
+i will respond as soon as possible.
