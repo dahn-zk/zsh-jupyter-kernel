@@ -13,27 +13,26 @@ feedback and suggestions are welcome in [github issues](https://github.com/dan-o
 
 ## installation
 
-1. install the python package from [pypi](https://pypi.org/project/zsh-jupyter-kernel/).
-2. install the jupyter kernel spec using python script `install` in the `zsh_jupyter_kernel` module.
-   check `python -m zsh_jupyter_kernel.install -h` for possible installation options.
-   default installation will install the kernel in the user location.
-   use `--sys-prefix` option if you want to install the kernel in your current virtual environment.
+install the python package from [pypi](https://pypi.org/project/zsh-jupyter-kernel/) using available package manager like `pip` or `pipenv`
 
-see some common installation examples below.
+(optional) by default the installation script will install the package *and* the kernel. the kernel location will be the same as the python environment from which the installation is done. check `python -m zsh_jupyter_kernel.install -h` for possible installation options if you want to install the kernel in a different environment or to change display name.
 
 ### pipenv
 
 ```sh
 pipenv --python 3.10 install notebook zsh_jupyter_kernel
-pipenv run python -m zsh_jupyter_kernel.install --sys-prefix
 ```
 
 ### pip
 
 ```sh
 python -m pip install notebook zsh_jupyter_kernel
-python -m zsh_jupyter_kernel.install --sys-prefix
 ```
+
+## usage
+
+expect the kernel to work as usual including your zsh configs *except without stdin (user input) support and prompt line* and in the boundaries of the current jupyter limitations like not all ansi codes will work in certain cases ('\r') and in general things that expect terminal will have unexpected behavior.
+see below why user input is not supported.
 
 ## technical overview
 
@@ -59,19 +58,15 @@ code completeness is checked with the temporary zsh process and help of `EXEC` z
 
 ### stderr
 
-stderr content is just sent to the front-end as regular stdout.
+stderr content is just sent to the front-end as regular stdout the same way it is in a terminal.
 
 ### stdin
 
 stdin is not supported because of the execution system when a process spawned by a user waits for stdin, there is no way to detect it.
 
-### missing features
+jupyter is a request-reply system, and zsh as a shell that constantly receives input and prints whatever current processes want to output. there is no clear start and end of a code execution in a shell unlike in jupyter system: a front-end sends a code from a cell to a kernel and waits until the kernel sends the full output back.
 
-- history
-- rich html output for things like images and tables
-- stdin. might be possible with or without the current system
-- pagers. might be possible or not
-- stored and referenceable outputs
+because of these two different ways of interacting with user zsh jupyter kernel cannot process stdin in a way python kernel does on `input()`, meaning you will not be able to enter a sudo password or answer y/n to prompts or use a pager like less. when a spawned program waits for a user input, you will need to interrupt the kernel and use any options which do not require input.
 
 ## troubleshooting
 

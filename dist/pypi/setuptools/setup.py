@@ -1,6 +1,7 @@
 from setuptools import setup
 
 from zsh_jupyter_kernel.config import config
+from zsh_jupyter_kernel.install import install
 
 setup(
     name = config['name'],
@@ -30,6 +31,8 @@ setup(
     keywords = config['keywords'],
     python_requires = config['python_version'],
 )
+
+install(kernel_name = "zsh", display_name = "zsh", path_prefix = 'sys')
 
 # Reference
 # https://packaging.python.org/tutorials/packaging-projects/
