@@ -1,4 +1,5 @@
-from ipykernel.kernelapp import IPKernelApp
+from ipykernel.kernelapp import launch_new_instance
+
 from .kernel import ZshKernel
 
-IPKernelApp.launch_instance(kernel_class = ZshKernel)
+launch_new_instance(kernel_class = ZshKernel)
