@@ -41,8 +41,11 @@ def install(
                     fp = f,
                     indent = 4,
                 )
-            for logof in ['logo-32x32.png', 'logo-64x64.png']:
-                shutil.copy(os.path.join(os.path.dirname(__file__), logof), tempd)
+
+            for logof in ('logo-32x32.png', 'logo-64x64.png'):
+                src = os.path.join(os.path.dirname(__file__), logof)
+                dst = os.path.join(tempd, logof)
+                shutil.copyfile(src, dst)
 
             user = path_prefix == 'user'
             if custom_path_prefix is not None:
