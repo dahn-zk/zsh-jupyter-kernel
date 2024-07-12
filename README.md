@@ -27,6 +27,7 @@ pipenv --python 3.10 install notebook zsh_jupyter_kernel
 
 ```sh
 python -m pip install notebook zsh_jupyter_kernel
+python -m zsh_jupyter_kernel.install --sys-prefix
 ```
 
 ## usage
