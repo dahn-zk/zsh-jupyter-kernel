@@ -1,12 +1,13 @@
+/.venv/
+
+/build/
+
 log/
-/venv/
 
 .ipynb_checkpoints/
 
 .pytest_cache/
 __pycache__
-
-/build/
 
 .idea/
 *.iml
