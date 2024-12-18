@@ -1,22 +1,13 @@
-# configuration, packaging and distribution tools
-
-## pypi
-
-### setuptools
-
-to build a distribution:
-
-change the working directory to `dist/pypi/setuptools`.
+https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools
 
 ```zsh
-python setup.py sdist bdist_wheel
-```
+python -m pip install setuptools
+python -m pip install build
+python -m pip install twine
 
-then to test it, upload it to testpypi:
+python -m build
 
-```zsh
 twine upload --repository testpypi dist/*
-```
 
 and run in a separate window and a separate directory to test the
 installation from testpypi:

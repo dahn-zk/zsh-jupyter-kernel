@@ -4,8 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [packages]
-zsh-jupyter-kernel = { editable = true, path = "./dist/pypi/setuptools" }
-    # `editable = true` also makes the dependencies specified by setup.py to be installed as well
+zsh-jupyter-kernel = { editable = true, path = "." }
 jupyterlab = "*"
 jsonschema = "*" # testing message specs (msgspec_v5.py)
 pytest = "*"

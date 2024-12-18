@@ -82,7 +82,7 @@ config.update({
         'banner.txt',
         'capture.zsh',
         'README.md',
-        'LICENSE.txt',
+        'LICENSE.md',
         'logo-32x32.png',
         'logo-64x64.png',
         'version',

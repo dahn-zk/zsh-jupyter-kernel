@@ -7,9 +7,6 @@ pipenv --rm
 # check pipenv
 pipenv --version; which pipenv
 
-# forgot wtf is this
-rm -rf "../src/jupyter-kernel-test/pip-wheel-metadata"
-
 # create environment
 pipenv --python 3.8
 

@@ -1,0 +1,36 @@
+[project]
+name = "zsh-jupyter-kernel"
+version = "3.5.1"
+requires-python = ">=3.10"
+description = "Z shell kernel for Project Jupyter"
+readme = "README.md"
+license = { file = "LICENSE.md" }
+authors = [{ name = "Danylo Dubinin", email = "danylo.dubinin@gmail.com" }]
+keywords = ["jupyter", "zsh", "shell"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Jupyter",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Unix Shell",
+    "Topic :: System :: Shells",
+]
+dependencies = [
+    "ipykernel",
+    "jupyter_client",
+    "pexpect",
+]
+[project.urls]
+"Homepage" = "https://github.com/dahn-zk/zsh-jupyter-kernel"
+"Repository" = "https://github.com/dahn-zk/zsh-jupyter-kernel.git"
+"Changelog" = "https://github.com/dahn-zk/zsh-jupyter-kernel/blob/master/CHANGELOG.md"
+
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["zsh_jupyter_kernel"]

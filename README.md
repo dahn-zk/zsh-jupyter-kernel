@@ -1,6 +1,6 @@
 # zsh kernel for jupyter
 
-![screenshot](misc/example.png)
+![screenshot](screenshots/example.png)
 
 a simple z shell jupyter kernel powered by python 3, pexpect and enthusiasm.
 
