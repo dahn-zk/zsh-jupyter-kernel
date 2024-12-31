@@ -1,3 +1,1 @@
-- update [version](/src/zsh_jupyter_kernel/version).
-- [keep a changelog](https://keepachangelog.com/en/1.0.0/).
-- [package and distribute](/dist/)
+[keep a changelog](https://keepachangelog.com).

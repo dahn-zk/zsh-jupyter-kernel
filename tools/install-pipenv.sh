@@ -11,8 +11,8 @@ pipenv --version; which pipenv
 pipenv --python 3.8
 
 # install dependencies and kernel
-pipenv install --dev
-pipenv run python -m zsh_jupyter_kernel.install --sys-prefix
+pipenv update
+pipenv run python -m zsh_jupyter_kernel.install --name zsh --display-name "Z shell (dev)" --sys-prefix
 
 # quick test
 pipenv run jupyter console --kernel=zsh

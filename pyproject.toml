@@ -1,6 +1,6 @@
 [project]
 name = "zsh-jupyter-kernel"
-version = "3.5.1"
+dynamic = ["version"]
 requires-python = ">=3.10"
 description = "Z shell kernel for Project Jupyter"
 readme = "README.md"
@@ -18,11 +18,7 @@ classifiers = [
     "Programming Language :: Unix Shell",
     "Topic :: System :: Shells",
 ]
-dependencies = [
-    "ipykernel",
-    "jupyter_client",
-    "pexpect",
-]
+dependencies = ["ipykernel", "jupyter_client", "pexpect"]
 [project.urls]
 "Homepage" = "https://github.com/dahn-zk/zsh-jupyter-kernel"
 "Repository" = "https://github.com/dahn-zk/zsh-jupyter-kernel.git"
@@ -31,6 +27,10 @@ dependencies = [
 [build-system]
 requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
-
 [tool.setuptools]
 packages = ["zsh_jupyter_kernel"]
+[tool.setuptools.dynamic]
+version = { file = "zsh_jupyter_kernel/version.txt" }
+[tool.setuptools.package-data]
+zsh_jupyter_kernel = ["version.txt", "capture.zsh", "banner.txt", "logo.png",
+    "logo-32x32.png", "logo-64x64.png"]

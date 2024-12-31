@@ -1,5 +1,10 @@
 # changelog
 
+## [3.5.1] - 2024-12-31
+### fixed
+- issues with logo copying
+- various minor fixes
+
 ## [3.5.0] - 2022-07-25
 ### added
 - installation options to change display name and improved options help

@@ -1,15 +1,16 @@
-/.venv/
+logs/
 
 /build/
+/dist/
 
-log/
+.env
+/.venv/
 
 .ipynb_checkpoints/
 
 .pytest_cache/
 __pycache__
+*.egg-info
 
 .idea/
 *.iml
-
-/sandbox/

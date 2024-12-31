@@ -1,17 +1,17 @@
 import argparse
 import json
 import os
+from pathlib import Path
 import shutil
 import sys
 import traceback
 from tempfile import TemporaryDirectory
 from typing import Literal
 
-from jupyter_client.kernelspec import install_kernel_spec, get_kernel_spec, KernelSpec, KernelSpecManager
+import jupyter_client.kernelspec
 
 def main(argv = None):
     args = parse_args(argv)
-
     if args.prefix:
         install(args.name, args.display_name, custom_path_prefix = args.prefix)
     elif args.sys_prefix:
@@ -29,63 +29,69 @@ def install(
 ):
     try:
         with TemporaryDirectory() as tempd:
-            os.chmod(tempd, 0o755)  # Starts off as 700, not user readable
-            with open(os.path.join(tempd, 'kernel.json'), 'w') as f:
-                json.dump(
-                    {  # [kernel-specs]
-                        "argv"          : [sys.executable, "-m", 'zsh_jupyter_kernel', "-f", "{connection_file}"],
-                        "display_name"  : display_name,
-                        "language"      : "zsh",
-                        "interrupt_mode": "signal",
-                    },
-                    fp = f,
-                    indent = 4,
-                )
-
-            for logof in ('logo-32x32.png', 'logo-64x64.png'):
-                src = os.path.join(os.path.dirname(__file__), logof)
-                dst = os.path.join(tempd, logof)
-                shutil.copyfile(src, dst)
-
-            user = path_prefix == 'user'
-            if custom_path_prefix is not None:
-                prefix = custom_path_prefix
-            elif path_prefix == 'sys':
-                prefix = sys.prefix
-            elif path_prefix == 'default':
-                prefix = None
-
-            try:
-                install_kernel_spec(
-                    source_dir = tempd,
-                    kernel_name = kernel_name,
-                    user = user and not (custom_path_prefix is not None),
-                    prefix = prefix,
-                )
-            except PermissionError as e:
-                print(e)
-                print('sorry, you do not have appropriate permissions to install kernel in the specified location.\n'
-                      'if you want to install in the default system-wide location, use elevated priviliges or login'
-                      'as an administrator.\n'
-                      'otherwise try installing in a current python environment location using --sys-prefix.\n'
-                      'use --help to read more.')
-            else:
-                spec: KernelSpec = get_kernel_spec(kernel_name = kernel_name)
-                print(
-                    f"installed z shell jupyter kernel spec in {spec.resource_dir}:\n"
-                    f"""{json.dumps(dict(
-                        argv = spec.argv,
-                        env = spec.env,
-                        display_name = spec.display_name,
-                        language = spec.language,
-                        interrupt_mode = spec.interrupt_mode,
-                        metadata = spec.metadata,
-                    ), indent = 4)}"""
-                )
+            install_(kernel_name, display_name, path_prefix, custom_path_prefix, tempd)
     except Exception as e:
         traceback.print_exception(e)
-        print('\nsorry, an unhandled error occured.'
-              f' please report this bug to https://github.com/dan-oak/zsh-jupyter-kernel/issues')
+        print()
+        print("sorry, an unhandled error occured.")
+
+def install_(kernel_name, display_name, path_prefix, custom_path_prefix, tempd):
+    os.chmod(tempd, 0o755)  # starts off as 700, not user readable
+    # [kernel-specs]
+    with open(Path(tempd) / 'kernel.json', 'w') as f:
+        d = {
+            "argv": [sys.executable, "-m", 'zsh_jupyter_kernel', "-f", "{connection_file}"],
+            "display_name": display_name,
+            "language": "zsh",
+            "interrupt_mode": "signal",
+        }
+        # noinspection PyTypeChecker
+        json.dump(d, f, indent = 4)
+    # logos
+    for logof in ('logo-32x32.png', 'logo-64x64.png'):
+        src = Path(__file__).with_name(logof)
+        dst = Path(tempd) / logof
+        shutil.copyfile(src, dst)
+    #
+    user = path_prefix == 'user'
+    prefix = None
+    if custom_path_prefix is not None:
+        prefix = custom_path_prefix
+    elif path_prefix == 'sys':
+        prefix = sys.prefix
+    try:
+        jupyter_client.kernelspec.install_kernel_spec(
+            source_dir = tempd,
+            kernel_name = kernel_name,
+            user = user and not (custom_path_prefix is not None),
+            prefix = prefix,
+        )
+    except PermissionError as e:
+        print(e)
+        print('sorry, you do not have appropriate permissions to install kernel in the specified location.\n'
+              'if you want to install in the default system-wide location, use elevated priviliges or login'
+              'as an administrator.\n'
+              'otherwise try installing in a current python environment location using --sys-prefix.\n'
+              'use --help to read more.')
+    else:
+        spec = jupyter_client.kernelspec.get_kernel_spec(kernel_name = kernel_name)
+        print(
+            f"installed Z shell jupyter kernel spec in {spec.resource_dir}:\n"
+            f"""{json.dumps(dict(
+                argv = spec.argv,
+                env = spec.env,
+                display_name = spec.display_name,
+                language = spec.language,
+                interrupt_mode = spec.interrupt_mode,
+                metadata = spec.metadata,
+            ), indent = 4)}"""
+        )
+
+def install_logos(tempd):
+    for logof in ('logo-32x32.png', 'logo-64x64.png'):
+        src = Path(__file__).with_name(logof)
+        dst = Path(tempd) / logof
+        shutil.copyfile(src, dst)
 
 def is_root() -> bool:
     try:
@@ -93,13 +99,19 @@ def is_root() -> bool:
     except AttributeError:
         return False  # assume not an admin on non-Unix platforms
 
-class ArgumentFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter): pass
+class ArgumentFormatter(
+    argparse.ArgumentDefaultsHelpFormatter,
+    argparse.RawDescriptionHelpFormatter):
+    pass
 
 def parse_args(argv) -> argparse.Namespace:
-    ksm = KernelSpecManager()
+    ksm = jupyter_client.kernelspec.KernelSpecManager()
     name = "${NAME}"
+    # noinspection PyProtectedMember
     user_dir = ksm._get_destination_dir(name, user = True)
+    # noinspection PyProtectedMember
     sys_dir = ksm._get_destination_dir(name, prefix = sys.prefix)
+    # noinspection PyProtectedMember
     root_dir = ksm._get_destination_dir(name)
     ap = argparse.ArgumentParser(
         description = "install zsh jupyter kernel",
